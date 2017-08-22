@@ -4,12 +4,10 @@
     </video>
     <div id='video-controls'>
         <input type="range" id="seek-bar" value="0" class="seekbar"><br>
-        <button id="play-pause-button" class="fa fa-play" title="play" ng-click="togglePlayPause();"></button>
+        <button id="play-pause-button" class="control fa fa-play" title="play" ng-click="togglePlayPause();"></button> {{seconds}}
         <button id="restart-button" class="restart" title="restart" ng-click="restartPlayer();">Restart</button>
-        <button id="mute-button" class="mute" title="mute" ng-click="toggleMute();">Mute</button>
-        <input id="vol-control" type="range" min="0" max="100" value="1"></input>
-        <button ng-click="goFullscreen('video');">
-            Fullscreen
-          </button>
+        <button id="mute-button" class="control fa fa-volume-up" title="mute" ng-click="toggleMute();"></button>
+        <input id="vol-control" type="range" min="0" max="100" value="100"></input>
+        <button id="fullscreen" class="control fa fa-arrows-alt" ng-click="goFullscreen('video');"></button>
     </div>
 </div>

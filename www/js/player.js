@@ -2,6 +2,17 @@ app.directive('player', function() {
     return {
         restrict: 'E',
         templateUrl: '../directives/player.html',
+        scope: {
+            // seconds: "="
+        },
+        controller: function($scope) {
+            // var mediaPlayer;
+            // mediaPlayer = document.getElementById('video');
+            // $scope.seconds = 0;
+            // while (!mediaPlayer.paused) {
+            //     $scope.seconds = mediaPlayer.currentTime;
+            // }
+        },
         link: function(scope, elem, attrs) {
             var mediaPlayer;
             mediaPlayer = document.getElementById('video');
@@ -11,6 +22,9 @@ app.directive('player', function() {
             var playbtn = document.getElementById('play-pause-button');
             var mutebtn = document.getElementById('mute-button');
             var volControl = document.getElementById('vol-control');
+            var curVol = volControl.value;
+            var fullscreen = false;
+            scope.seconds = 0;
 
             scope.changeButtonType = function(btn, value) {
                 btn.title = value;
@@ -21,6 +35,7 @@ app.directive('player', function() {
             var seekBarActive = false;
             seekBar.addEventListener("mousedown", function() {
                 seekBarActive = true;
+                mediaPlayer.pause();
             });
             seekBar.addEventListener("mouseup", function() {
                 seekBarActive = false;
@@ -41,6 +56,13 @@ app.directive('player', function() {
 
             volControl.addEventListener("mouseup", function() {
                 mediaPlayer.volume = volControl.value / 100;
+                if (volControl.value > 1) {
+                    $("#mute-button").removeClass('fa-volume-off');
+                    $("#mute-button").addClass('fa-volume-up');
+                } else {
+                    $("#mute-button").removeClass('fa-volume-up');
+                    $("#mute-button").addClass('fa-volume-off');
+                }
             })
 
             mediaPlayer.addEventListener("timeupdate", function() {
@@ -52,7 +74,14 @@ app.directive('player', function() {
                 // Calculate the slider value
                 var value = (100 / mediaPlayer.duration) * mediaPlayer.currentTime;
                 // Update the slider value
-                seekBar.value = value;
+                if (!seekBarActive) {
+                    seekBar.value = value;
+                }
+                scope.$apply(function() {
+                    scope.seconds = 0;
+                    scope.seconds = mediaPlayer.currentTime;
+                    console.log(scope.seconds)
+                })
             });
 
             scope.togglePlayPause = function() {
@@ -74,20 +103,36 @@ app.directive('player', function() {
             };
             scope.toggleMute = function() {
                 if (mediaPlayer.muted) {
-                    scope.changeButtonType(mutebtn, 'Mute');
+                    $("#mute-button").removeClass('fa-volume-off');
+                    $("#mute-button").addClass('fa-volume-up');
                     mediaPlayer.muted = false;
+                    volControl.value = curVol;
                 } else {
-                    scope.changeButtonType(mutebtn, 'Un-Mute');
+                    $("#mute-button").removeClass('fa-volume-up');
+                    $("#mute-button").addClass('fa-volume-off');
+                    curVol = volControl.value;
+                    volControl.value = 0;
                     mediaPlayer.muted = true;
                 }
             }
             scope.goFullscreen = function(id) {
                 var element = document.getElementById(id);
-                if (element.mozRequestFullScreen) {
-                    element.mozRequestFullScreen();
-                } else if (element.webkitRequestFullScreen) {
-                    element.webkitRequestFullScreen();
+                if (!fullscreen) {
+                    if (element.mozRequestFullScreen) {
+                        element.mozRequestFullScreen();
+                        fullscreen = true;
+                    } else if (element.webkitRequestFullScreen) {
+                        element.webkitRequestFullScreen();
+                        fullscreen = true;
+                    }
+                } else {
+                    document.getElementsByTagName('video')[0].webkitExitFullScreen();
+                    fullscreen = false;
                 }
+            }
+
+            scope.updateSecs = function() {
+                scope.seconds = mediaPlayer.currentTime;
             }
         }
     }
