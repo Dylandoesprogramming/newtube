@@ -3,9 +3,13 @@
         <source src="../uploads/small.mp4">
     </video>
     <div id='video-controls'>
-        <input type="range" id="seek-bar" value="0" class="seekbar">
+        <input type="range" id="seek-bar" value="0" class="seekbar"><br>
         <button id="play-pause-button" class="fa fa-play" title="play" ng-click="togglePlayPause();"></button>
         <button id="restart-button" class="restart" title="restart" ng-click="restartPlayer();">Restart</button>
         <button id="mute-button" class="mute" title="mute" ng-click="toggleMute();">Mute</button>
+        <input id="vol-control" type="range" min="0" max="100" value="1"></input>
+        <button ng-click="goFullscreen('video');">
+            Fullscreen
+          </button>
     </div>
 </div>

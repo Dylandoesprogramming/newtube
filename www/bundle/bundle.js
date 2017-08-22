@@ -25,6 +25,7 @@ app.directive('player', function () {
             var seekBar = document.getElementById("seek-bar");
             var playbtn = document.getElementById('play-pause-button');
             var mutebtn = document.getElementById('mute-button');
+            var volControl = document.getElementById('vol-control');
 
             scope.changeButtonType = function (btn, value) {
                 btn.title = value;
@@ -51,6 +52,10 @@ app.directive('player', function () {
                     // Update the video time
                     mediaPlayer.currentTime = time;
                 }
+            });
+
+            volControl.addEventListener("mouseup", function () {
+                mediaPlayer.volume = volControl.value / 100;
             });
 
             mediaPlayer.addEventListener("timeupdate", function () {
@@ -89,6 +94,14 @@ app.directive('player', function () {
                 } else {
                     scope.changeButtonType(mutebtn, 'Un-Mute');
                     mediaPlayer.muted = true;
+                }
+            };
+            scope.goFullscreen = function (id) {
+                var element = document.getElementById(id);
+                if (element.mozRequestFullScreen) {
+                    element.mozRequestFullScreen();
+                } else if (element.webkitRequestFullScreen) {
+                    element.webkitRequestFullScreen();
                 }
             };
         }
