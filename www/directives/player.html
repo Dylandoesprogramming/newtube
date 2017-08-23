@@ -4,7 +4,8 @@
     </video>
     <div id='video-controls'>
         <input type="range" id="seek-bar" value="0" class="seekbar"><br>
-        <button id="play-pause-button" class="control fa fa-play" title="play" ng-click="togglePlayPause();"></button> {{seconds}}
+        <button id="play-pause-button" class="control fa fa-play" title="play" ng-click="togglePlayPause();"></button>
+        <span id="timer">{{seconds}}</span>
         <button id="restart-button" class="restart" title="restart" ng-click="restartPlayer();">Restart</button>
         <button id="mute-button" class="control fa fa-volume-up" title="mute" ng-click="toggleMute();"></button>
         <input id="vol-control" type="range" min="0" max="100" value="100"></input>

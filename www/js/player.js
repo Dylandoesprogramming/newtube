@@ -2,17 +2,6 @@ app.directive('player', function() {
     return {
         restrict: 'E',
         templateUrl: '../directives/player.html',
-        scope: {
-            // seconds: "="
-        },
-        controller: function($scope) {
-            // var mediaPlayer;
-            // mediaPlayer = document.getElementById('video');
-            // $scope.seconds = 0;
-            // while (!mediaPlayer.paused) {
-            //     $scope.seconds = mediaPlayer.currentTime;
-            // }
-        },
         link: function(scope, elem, attrs) {
             var mediaPlayer;
             mediaPlayer = document.getElementById('video');
@@ -24,13 +13,15 @@ app.directive('player', function() {
             var volControl = document.getElementById('vol-control');
             var curVol = volControl.value;
             var fullscreen = false;
-            scope.seconds = 0;
+            scope.seconds = "0:00";
 
-            scope.changeButtonType = function(btn, value) {
-                btn.title = value;
-                btn.innerHTML = value;
-                btn.className = value;
-            };
+            var convert = function(seconds) {
+                seconds = Number(seconds);
+                var hours = Math.floor(seconds / 3600);
+                var minutes = Math.floor(seconds % 3600 / 60);
+                var seconds = Math.floor(seconds % 3600 % 60);
+                return ((hours > 0 ? hours + ":" + (minutes < 10 ? "0" : "") : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds);
+            }
 
             var seekBarActive = false;
             seekBar.addEventListener("mousedown", function() {
@@ -39,7 +30,6 @@ app.directive('player', function() {
             });
             seekBar.addEventListener("mouseup", function() {
                 seekBarActive = false;
-                // scope.changeButtonType(playbtn, "Play");
                 $("#play-pause-button").removeClass('fa-pause');
                 $("#play-pause-button").addClass('fa-play');
                 mediaPlayer.pause();
@@ -67,7 +57,6 @@ app.directive('player', function() {
 
             mediaPlayer.addEventListener("timeupdate", function() {
                 if (mediaPlayer.ended) {
-                    // scope.changeButtonType(playbtn, "Play")
                     $("#play-pause-button").removeClass('fa-pause');
                     $("#play-pause-button").addClass('fa-refresh');
                 }
@@ -79,19 +68,38 @@ app.directive('player', function() {
                 }
                 scope.$apply(function() {
                     scope.seconds = 0;
-                    scope.seconds = mediaPlayer.currentTime;
+                    scope.seconds = Math.round(mediaPlayer.currentTime);
+                    scope.seconds = convert(scope.seconds);
                     console.log(scope.seconds)
                 })
             });
 
+            $('body').keyup(function(e) {
+                if (e.keyCode == 32) {
+                    scope.togglePlayPause();
+                }
+
+                if (e.keyCode == 37) {
+                    mediaPlayer.currentTime = mediaPlayer.currentTime - 1;
+                }
+
+                if (e.keyCode == 39) {
+                    mediaPlayer.currentTime = mediaPlayer.currentTime + 1;
+                }
+            })
+
+            $('#player').keyup(function(e) {
+                if (e.keyCode == 32) {
+                    scope.togglePlayPause();
+                }
+            })
+
             scope.togglePlayPause = function() {
                 if (mediaPlayer.paused || mediaPlayer.ended) {
-                    // scope.changeButtonType(playbtn, 'Pause');
                     $("#play-pause-button").removeClass('fa-play');
                     $("#play-pause-button").addClass('fa-pause');
                     mediaPlayer.play();
                 } else {
-                    // scope.changeButtonType(playbtn, "Play");
                     $("#play-pause-button").removeClass('fa-pause');
                     $("#play-pause-button").addClass('fa-play');
                     mediaPlayer.pause();

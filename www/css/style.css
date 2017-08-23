@@ -52,6 +52,8 @@
       background: none;
       height: 25px;
       width: 25px; }
+    #player #video-controls #timer {
+      color: white; }
 
 video::-webkit-media-controls-enclosure {
   display: none !important; }
