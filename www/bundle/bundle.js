@@ -148,9 +148,25 @@ app.directive('player', function () {
                         element.webkitRequestFullScreen();
                         fullscreen = true;
                     }
+                    $("#play-pause-button").css('font-size', '48px');
+                    $("#play-pause-button").css('bottom', '0px');
+                    $("#fullscreen").css('font-size', '48px');
+                    $("#fullscreen").css('bottom', '0px');
+                    $("#play-pause-button").css('width', '50px');
+                    $("#play-pause-button").css('height', '50px');
+                    $("#fullscreen").css('width', '50px');
+                    $("#fullscreen").css('height', '50px');
                 } else {
                     document.getElementsByTagName('video')[0].webkitExitFullScreen();
                     fullscreen = false;
+                    $("#play-pause-button").css('font-size', '24px');
+                    $("#play-pause-button").css('bottom', '0px');
+                    $("#fullscreen").css('font-size', '24px');
+                    $("#fullscreen").css('bottom', '0px');
+                    $("#play-pause-button").css('width', '25px');
+                    $("#play-pause-button").css('height', '25px');
+                    $("#fullscreen").css('width', '25px');
+                    $("#fullscreen").css('height', '25px');
                 }
             };
 
@@ -158,6 +174,14 @@ app.directive('player', function () {
                 scope.seconds = mediaPlayer.currentTime;
             };
         }
+    };
+});
+'use strict';
+
+app.directive('topbar', function () {
+    return {
+        Restrict: 'E',
+        templateUrl: '../directives/topbar.html'
     };
 });
 //# sourceMappingURL=bundle.js.map
