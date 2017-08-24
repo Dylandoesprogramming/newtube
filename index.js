@@ -10,6 +10,7 @@ const formidable = require('formidable');
 const config = require("./config");
 const homeCtrl = require("./controllers/homeCtrl")
 const app = module.exports = express();
+let data;
 // let database
 app.use(cors());
 app.use(bodyParser.json());
@@ -24,7 +25,7 @@ app.use(passport.session());
 app.use(express.static('www'));
 massive(config.connectionString).then(db => {
     app.set('db', db)
-        // database = app.get('db');
+        // data = app.get('db');
 })
 
 passport.use(new Auth0Strategy({
@@ -34,70 +35,53 @@ passport.use(new Auth0Strategy({
         callbackURL: '/auth/callback'
     },
     function(accessToken, refreshToken, extraParams, profile, done) {
-        console.log(profile)
-            //Find user in database
+        // console.log(profile)
         const db = app.get('db');
         // console.log(profile);
-        db.getUserByAuthId([profile.id], function(err, user) {
-            console.log('Working')
-            user = user[0];
-            if (!user) { //if there isn't one, we'll create one!
-                console.log('CREATING USER');
-                db.createUserByAuth([profile.displayName, profile.id], function(err, user) {
-                    console.log('USER CREATED', user);
-                    return done(err, user[0]); // GOES TO SERIALIZE USER
-                })
-            } else { //when we find the user, return it
-                console.log('FOUND USER', user);
-                return done(err, user);
-            }
-        });
-    }
-));
-
-//THIS IS INVOKED ONE TIME TO SET THINGS UP
-passport.serializeUser(function(userA, done) {
-    console.log('serializing', userA);
-    var userB = userA;
-    //Things you might do here :
-    //Serialize just the id, get other information to add to session, 
-    done(null, userB); //PUTS 'USER' ON THE SESSION
-});
-
-//USER COMES FROM SESSION - THIS IS INVOKED FOR EVERY ENDPOINT
-passport.deserializeUser(function(userB, done) {
-    var userC = userB;
-    //Things you might do here :
-    // Query the database with the user id, get other information to put on req.user
-    done(null, userC); //PUTS 'USER' ON REQ.USER
-});
-
-app.get('/auth', passport.authenticate('auth0'));
+        db.getUserByName([profile.nickname])
+            .then(
+                function(user) {
+                    if (user.length < 1) {
+                        db.createUserByName([profile.nickname]);
+                        return done(null, user[0]);
+                    } else {
+                        console.log(user);
+                        return done(null, user[0]);
+                    }
+                });
+        return done(null, profile)
+    }));
 
 
-//**************************//
-//To force specific provider://
-//**************************//
-// app.get('/login/google',
-//   passport.authenticate('auth0', {connection: 'google-oauth2'}), function (req, res) {
-//   res.redirect("/");
-// });
+// Start passport authentication with auth0 using Auth0Strategy
+// Passport.authenticate will create a req/res function
+app.get('/auth', passport.authenticate('auth0'))
 
+//Auth0 returns to this endpoint
+// This callback location must match the callbackURL in the Auth0Strategy
 app.get('/auth/callback',
-    passport.authenticate('auth0', { successRedirect: '/' }),
-    function(req, res) {
-        res.status(200).send(req.user);
+    passport.authenticate('auth0', {
+        successRedirect: '/',
+        failureRedirect: '/auth'
     })
+)
 
-app.get('/auth/me', function(req, res) {
-    if (!req.user) return res.sendStatus(404);
-    //THIS IS WHATEVER VALUE WE GOT FROM userC variable above.
-    res.status(200).send(req.user);
+// Serialize encodes profile and adds on to session
+// This function receives the results of the function in the new instance of Auth0
+// Profile is passed on to sessions
+passport.serializeUser(function(user, done) {
+    done(null, user);
 })
 
-app.get('/auth/logout', function(req, res) {
-    req.logout();
-    res.redirect('/');
+
+// Deserialize decodes profile from session to put on to req.user
+passport.deserializeUser(function(user, done) {
+    done(null, user)
+})
+
+// Return user object from session
+app.get('/me', function(req, res) {
+    res.send(req.user)
 })
 
 

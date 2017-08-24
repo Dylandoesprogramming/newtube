@@ -1,44 +1,44 @@
 {
-  "name": "newtube",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Dylandoesprogramming/newtube.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Dylandoesprogramming/newtube/issues"
-  },
-  "homepage": "https://github.com/Dylandoesprogramming/newtube#readme",
-  "dependencies": {
-    "babel": "^6.23.0",
-    "babel-core": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
-    "body-parser": "^1.17.2",
-    "cors": "^2.8.4",
-    "del": "^3.0.0",
-    "express": "^4.15.4",
-    "express-session": "^1.15.5",
-    "formidable": "^1.1.1",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^7.0.0",
-    "gulp-cachebust": "0.0.8",
-    "gulp-clean-css": "^3.7.0",
-    "gulp-concat": "^2.6.1",
-    "gulp-print": "^2.0.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^3.1.0",
-    "gulp-sourcemaps": "^2.6.1",
-    "massive": "^3.2.2",
-    "passport": "^0.4.0",
-    "passport-auth0": "^0.6.0",
-    "sass": "^1.0.0-beta.2"
-  }
+    "name": "newtube",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Dylandoesprogramming/newtube.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Dylandoesprogramming/newtube/issues"
+    },
+    "homepage": "https://github.com/Dylandoesprogramming/newtube#readme",
+    "dependencies": {
+        "babel": "^6.23.0",
+        "babel-core": "^6.26.0",
+        "babel-preset-es2015": "^6.24.1",
+        "babel-preset-stage-2": "^6.24.1",
+        "body-parser": "^1.17.2",
+        "cors": "^2.8.4",
+        "del": "^3.0.0",
+        "express": "^4.15.4",
+        "express-session": "^1.15.5",
+        "formidable": "^1.1.1",
+        "gulp": "^3.9.1",
+        "gulp-babel": "^7.0.0",
+        "gulp-cachebust": "0.0.8",
+        "gulp-clean-css": "^3.7.0",
+        "gulp-concat": "^2.6.1",
+        "gulp-print": "^2.0.1",
+        "gulp-rename": "^1.2.2",
+        "gulp-sass": "^3.1.0",
+        "gulp-sourcemaps": "^2.6.1",
+        "massive": "^3.2.2",
+        "passport": "^0.4.0",
+        "passport-auth0": "^0.6.0",
+        "sass": "^1.0.0-beta.2"
+    }
 }
