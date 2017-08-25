@@ -75,15 +75,15 @@ app.directive('player', function() {
             });
 
             $('body').keyup(function(e) {
-                if (e.keyCode == 32) {
+                if (e.keyCode == 32) { //on pressing space
                     scope.togglePlayPause();
                 }
 
-                if (e.keyCode == 37) {
+                if (e.keyCode == 37) { //on pressing left arrow
                     mediaPlayer.currentTime = mediaPlayer.currentTime - 1;
                 }
 
-                if (e.keyCode == 39) {
+                if (e.keyCode == 39) { //on pressing right arrow
                     mediaPlayer.currentTime = mediaPlayer.currentTime + 1;
                 }
             })

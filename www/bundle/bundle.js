@@ -5,6 +5,10 @@ var app = angular.module('newtube', ['ui.router']).config(function ($stateProvid
         url: '/',
         templateUrl: '../views/home.html',
         controller: 'homeCtrl'
+    }).state('video', {
+        url: '/video',
+        templateUrl: '../views/video.html',
+        controller: 'videoCtrl'
     });
     $urlRouterProvider.otherwise('/');
 });
@@ -91,14 +95,17 @@ app.directive('player', function () {
 
             $('body').keyup(function (e) {
                 if (e.keyCode == 32) {
+                    //on pressing space
                     scope.togglePlayPause();
                 }
 
                 if (e.keyCode == 37) {
+                    //on pressing left arrow
                     mediaPlayer.currentTime = mediaPlayer.currentTime - 1;
                 }
 
                 if (e.keyCode == 39) {
+                    //on pressing right arrow
                     mediaPlayer.currentTime = mediaPlayer.currentTime + 1;
                 }
             });

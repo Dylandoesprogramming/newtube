@@ -10,7 +10,6 @@ const formidable = require('formidable');
 const config = require("./config");
 const homeCtrl = require("./controllers/homeCtrl")
 const app = module.exports = express();
-let data;
 // let database
 app.use(cors());
 app.use(bodyParser.json());
@@ -42,14 +41,17 @@ passport.use(new Auth0Strategy({
             .then(
                 function(user) {
                     if (user.length < 1) {
-                        db.createUserByName([profile.nickname]);
-                        return done(null, user[0]);
+                        db.createUserByName([profile.nickname]).then(function(user) {
+                            profile.user = user[0];
+                            console.log(user);
+                            return done(null, profile);
+                        });
                     } else {
-                        console.log(user);
-                        return done(null, user[0]);
+                        profile.user = user[0];
+                        console.log(user[0]);
+                        return done(null, profile);
                     }
                 });
-        return done(null, profile)
     }));
 
 
@@ -84,6 +86,11 @@ app.get('/me', function(req, res) {
     res.send(req.user)
 })
 
+app.get('/auth/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
+    console.log(req.user)
+})
 
 app.get('/', function(req, res, next) {
     res.sendFile(__dirname + '/www/index.html');
@@ -91,18 +98,25 @@ app.get('/', function(req, res, next) {
 
 app.post('/', function(req, res) {
     var form = new formidable.IncomingForm();
-
+    // console.log(userId);
     form.parse(req);
+    if (req.user) {
+        var userId = req.user.user.userid;
+        form.on('fileBegin', function(name, file) {
+            // app.get('db').getVideoByName()
+            file.path = __dirname + '/www/uploads/' + file.name;
+            app.get('db').createVideo(file.name, "../www/uploads/" + file.name, new Date(), userId, "blank");
+        });
 
-    form.on('fileBegin', function(name, file) {
-        file.path = __dirname + '/www/uploads/' + file.name;
-    });
+        form.on('file', function(name, file) {
+            console.log('Uploaded ' + file.name);
+        });
 
-    form.on('file', function(name, file) {
-        console.log('Uploaded ' + file.name);
-    });
-
-    res.sendFile(__dirname + '/www/index.html');
+        res.sendFile(__dirname + '/www/index.html');
+    } else {
+        console.log("NOT LOGGED IN!")
+        res.status(400).send('Not Logged In!')
+    }
 });
 
 
