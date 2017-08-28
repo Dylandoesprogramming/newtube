@@ -7,10 +7,10 @@ const cors = require('cors');
 const massive = require('massive');
 const gulp = require('gulp');
 const formidable = require('formidable');
+const fs = require('fs');
 const config = require("./config");
 const homeCtrl = require("./controllers/homeCtrl")
 const app = module.exports = express();
-// let database
 app.use(cors());
 app.use(bodyParser.json());
 app.use(session({
@@ -98,17 +98,37 @@ app.get('/', function(req, res, next) {
 
 app.post('/', function(req, res) {
     var form = new formidable.IncomingForm();
-    // console.log(userId);
     form.parse(req);
     if (req.user) {
         var userId = req.user.user.userid;
+        console.log('User Found')
         form.on('fileBegin', function(name, file) {
-            // app.get('db').getVideoByName()
-            file.path = __dirname + '/www/uploads/' + file.name;
-            app.get('db').createVideo(file.name, "../www/uploads/" + file.name, new Date(), userId, "blank");
+            if (file.name.indexOf('.mp4') > 0) {
+                console.log('file is mp4')
+                app.get('db').getVideoByName(file.name).then(function(video) {
+                    "got videos by name"
+                    if (video[0]) {
+                        if (video[0].filename == file.name) {
+                            console.log("renaming video")
+                            file.name = file.name.slice(0, file.name.length - 4);
+                            file.name = file.name + "re";
+                            file.name = file.name + ".mp4";
+                        }
+                    }
+                    console.log('setting path')
+                    form.uploadDir = __dirname + '/www/uploads/'
+                    fs.rename(file.path, form.uploadDir + "/" + file.name, function(err) {
+                        console.log("ERROR: " + err);
+                    });
+                    app.get('db').createVideo(file.name, "../www/uploads/" + file.name, new Date(), userId, "blank", file.name);
+                })
+            } else {
+                console.log("NOT A VIDEO!");
+            }
         });
 
         form.on('file', function(name, file) {
+            console.log(file.name)
             console.log('Uploaded ' + file.name);
         });
 
@@ -121,6 +141,8 @@ app.post('/', function(req, res) {
 
 
 app.get('/dashboard/video', homeCtrl.getAnalytics);
-app.get('/video/:id', homeCtrl.getComments);
+app.get('/video/:id/getvideo', homeCtrl.getVideo);
+app.get('/video/:id/getcomments', homeCtrl.getComments)
 app.get("/search", homeCtrl.getUsers);
+app.post('/video/:id/comments', homeCtrl.postComment)
 app.listen(3001, () => console.log('listening port 3001'));

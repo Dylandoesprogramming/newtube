@@ -1,7 +1,5 @@
 <div id="player">
-    <video id="video" controls>
-        <source src="../uploads/small.mp4">
-    </video>
+    <video id="video" controls ng-src="{{curVideo.vidlink}}"></video>
     <div id='video-controls'>
         <input type="range" id="seek-bar" value="0" class="seekbar"><br>
         <button id="play-pause-button" class="control fa fa-play" title="play" ng-click="togglePlayPause();"></button>

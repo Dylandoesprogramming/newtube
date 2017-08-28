@@ -6,10 +6,14 @@ var app = angular.module('newtube', ['ui.router']).config(function ($stateProvid
         templateUrl: '../views/home.html',
         controller: 'homeCtrl'
     }).state('video', {
-        url: '/video',
+        url: '/video/:id',
+        // params: {
+        //     param1: "id"
+        // },
         templateUrl: '../views/video.html',
         controller: 'videoCtrl'
     });
+
     $urlRouterProvider.otherwise('/');
 });
 'use strict';
@@ -94,10 +98,9 @@ app.directive('player', function () {
             });
 
             $('body').keyup(function (e) {
-                if (e.keyCode == 32) {
-                    //on pressing space
-                    scope.togglePlayPause();
-                }
+                // if (e.keyCode == 32) { //on pressing space
+                //     scope.togglePlayPause();
+                // }
 
                 if (e.keyCode == 37) {
                     //on pressing left arrow
@@ -189,6 +192,61 @@ app.directive('topbar', function () {
     return {
         Restrict: 'E',
         templateUrl: '../directives/topbar.html'
+    };
+});
+"use strict";
+
+app.controller('videoCtrl', function ($scope, $stateParams, videoSrvc) {
+    $scope.getVideo = function () {
+        videoSrvc.getVideo($stateParams.id).then(function (video) {
+            $scope.curVideo = video.data[0];
+            $scope.curVideo.vidlink = $scope.curVideo.vidlink.replace("../www/", "../");
+            console.log($scope.curVideo);
+        });
+    };
+    $scope.getComments = function () {
+        videoSrvc.getComments($stateParams.id).then(function (comments) {
+            console.log(comments.data);
+            return $scope.comments = comments.data;
+        });
+    };
+    $scope.subComment = function (comment) {
+        if (comment) {
+            videoSrvc.sendComment(comment, $stateParams.id).then(function () {
+                $scope.getComments();
+            });
+        }
+        $scope.curComment = "";
+    };
+    $scope.getVideo();
+
+    $scope.getComments();
+});
+"use strict";
+
+app.service('videoSrvc', function ($http) {
+    this.getVideo = function (id) {
+        console.log(id);
+        return $http({
+            method: "Get",
+            url: "/video/" + id + "/getvideo"
+        });
+    };
+    this.getComments = function (id) {
+        return $http({
+            method: "Get",
+            url: "/video/" + id + "/getcomments"
+        });
+    };
+    this.sendComment = function (comment, id) {
+        console.log(comment + ":" + id);
+        return $http({
+            method: "Post",
+            url: "/video/" + id + "/comments",
+            data: {
+                comment: comment
+            }
+        });
     };
 });
 //# sourceMappingURL=bundle.js.map

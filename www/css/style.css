@@ -9,7 +9,8 @@ body {
 #player {
   position: relative;
   width: 500px;
-  margin: 0 auto; }
+  margin: 0 auto;
+  padding: 3% 0; }
   #player #video {
     width: 100%;
     display: block; }
@@ -72,6 +73,8 @@ body {
   height: 50px;
   z-index: 2147483648;
   border-bottom: 1px solid silver; }
+  #topbar #signin {
+    float: right; }
   #topbar #hamburger {
     position: absolute;
     top: 50%;

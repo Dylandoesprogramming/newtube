@@ -75,9 +75,9 @@ app.directive('player', function() {
             });
 
             $('body').keyup(function(e) {
-                if (e.keyCode == 32) { //on pressing space
-                    scope.togglePlayPause();
-                }
+                // if (e.keyCode == 32) { //on pressing space
+                //     scope.togglePlayPause();
+                // }
 
                 if (e.keyCode == 37) { //on pressing left arrow
                     mediaPlayer.currentTime = mediaPlayer.currentTime - 1;

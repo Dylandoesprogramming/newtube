@@ -1,0 +1,16 @@
+<div id="video-page">
+    <topbar>
+    </topbar>
+    <player></player>
+    <h2 id="title">{{curVideo.title}}</h2>
+    <p id="description">{{curVideo.descr}}</p>
+    <p id="upload-time">{{curVideo.uptime}}</p>
+
+    <form id="comment-box">
+        <textarea rows="5" cols="20" placeholder="Enter a comment here." ng-model="curComment"></textarea>
+        <button type="button" ng-click="subComment(curComment)">Submit</button>
+    </form>
+    <ul>
+        <li ng-repeat="comment in comments">{{comment.comment}}</li>
+    </ul>
+</div>

@@ -7,9 +7,13 @@ let app = angular.module('newtube', ['ui.router'])
                 controller: 'homeCtrl',
             })
             .state('video', {
-                url: '/video',
+                url: '/video/:id',
+                // params: {
+                //     param1: "id"
+                // },
                 templateUrl: '../views/video.html',
                 controller: 'videoCtrl',
             })
+
         $urlRouterProvider.otherwise('/')
     });

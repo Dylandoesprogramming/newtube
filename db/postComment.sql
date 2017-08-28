@@ -1,0 +1,1 @@
+INSERT INTO comments (comment, vidid, userid) VALUES($1, $2, $3);
