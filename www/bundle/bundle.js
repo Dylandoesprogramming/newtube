@@ -12,13 +12,97 @@ var app = angular.module('newtube', ['ui.router']).config(function ($stateProvid
         // },
         templateUrl: '../views/video.html',
         controller: 'videoCtrl'
+    }).state('search', {
+        url: '/search?searchQuery',
+        templateUrl: '../views/search.html',
+        controller: 'searchCtrl'
+    }).state('dashboard', {
+        url: '/dashboard',
+        templateUrl: '../views/dashboard.html',
+        controller: 'dashboardCtrl'
+    }).state('dashvideos', {
+        url: '/dashboard/:id',
+        templateUrl: '../views/dashvideos.html',
+        controller: 'dashVidCtrl'
     });
 
     $urlRouterProvider.otherwise('/');
 });
+"use strict";
+
+app.controller('dashVidCtrl', function ($scope, $stateParams, videoSrvc) {
+    $scope.vidid = $stateParams.id;
+    $scope.getUser = function () {
+        videoSrvc.getUser().then(function (user) {
+            if (user) {
+                $scope.user = user.data;
+                $scope.getVideo($scope.vidid);
+            }
+        });
+    };
+    $scope.getVideo = function (vidid) {
+        console.log("vidid:" + vidid);
+        if ($scope.user) {
+            videoSrvc.getVideo(vidid).then(function (video) {
+                if ($scope.user.userid === video.data[0].userid) {
+                    console.log(video);
+                    $scope.curVideo = video.data[0];
+                    // $scope.curVideo.vidlink = $scope.curVideo.vidlink.replace("../www/", "../")
+                    $scope.typedTitle = $scope.curVideo.title;
+                    console.log($scope.curVideo);
+                } else {
+                    console.log("stop haxor!");
+                }
+            });
+        } else {
+            console.log('halt da hax0r');
+        }
+    };
+
+    $scope.changeTitle = function (title) {
+        if ($scope.user) {
+            if ($scope.curVideo) {
+                if (title) {
+                    videoSrvc.changeTitle($scope.vidid, title).then(function (video) {
+                        $scope.curVideo = video.data[0];
+                        console.log(video);
+                        $scope.typedTitle = $scope.curVideo.title;
+                    });
+                }
+            }
+        }
+    };
+
+    $scope.getUser();
+});
 'use strict';
 
-app.controller('homeCtrl', function ($scope) {});
+app.controller('dashboardCtrl', function ($scope, $stateParams, videoSrvc) {
+    $scope.vidid = $stateParams.id;
+    $scope.getUser = function () {
+        videoSrvc.getUser().then(function (user) {
+            $scope.user = user.data;
+            $scope.getVidsByUser($scope.user);
+        });
+    };
+    $scope.getVidsByUser = function (user) {
+        videoSrvc.getVidsByUser(user.userid).then(function (videos) {
+            $scope.videos = videos.data;
+        });
+    };
+    $scope.getUser();
+});
+'use strict';
+
+app.controller('homeCtrl', function ($scope, $stateParams, videoSrvc) {
+    $scope.getNewest = function () {
+        videoSrvc.getNewest().then(function (videos) {
+            $scope.newest = videos.data;
+            console.log($scope.newest);
+        });
+    };
+    $scope.getNewest();
+});
 'use strict';
 
 app.directive('player', function () {
@@ -28,7 +112,7 @@ app.directive('player', function () {
         link: function link(scope, elem, attrs) {
             var mediaPlayer;
             mediaPlayer = document.getElementById('video');
-            console.log(mediaPlayer);
+            // console.log(mediaPlayer);
             mediaPlayer.controls = false;
             var seekBar = document.getElementById("seek-bar");
             var playbtn = document.getElementById('play-pause-button');
@@ -93,7 +177,7 @@ app.directive('player', function () {
                     scope.seconds = 0;
                     scope.seconds = Math.round(mediaPlayer.currentTime);
                     scope.seconds = convert(scope.seconds);
-                    console.log(scope.seconds);
+                    // console.log(scope.seconds)
                 });
             });
 
@@ -188,6 +272,18 @@ app.directive('player', function () {
 });
 'use strict';
 
+app.controller('searchCtrl', function ($scope, $stateParams, videoSrvc) {
+    $scope.getResults = function () {
+        console.log($stateParams);
+        videoSrvc.getVideoByQuery($stateParams.searchQuery).then(function (results) {
+            // console.log(results.data);
+            $scope.results = results.data;
+        });
+    };
+    $scope.getResults();
+});
+'use strict';
+
 app.directive('topbar', function () {
     return {
         Restrict: 'E',
@@ -200,7 +296,7 @@ app.controller('videoCtrl', function ($scope, $stateParams, videoSrvc) {
     $scope.getVideo = function () {
         videoSrvc.getVideo($stateParams.id).then(function (video) {
             $scope.curVideo = video.data[0];
-            $scope.curVideo.vidlink = $scope.curVideo.vidlink.replace("../www/", "../");
+            // $scope.curVideo.vidlink = $scope.curVideo.vidlink.replace("../www/", "../")
             console.log($scope.curVideo);
         });
     };
@@ -245,6 +341,42 @@ app.service('videoSrvc', function ($http) {
             url: "/video/" + id + "/comments",
             data: {
                 comment: comment
+            }
+        });
+    };
+    this.getVideoByQuery = function (searchQuery) {
+        return $http({
+            method: "Get",
+            url: "/search/searchQuery?searchQuery=" + searchQuery
+        });
+    };
+    this.getNewest = function () {
+        return $http({
+            method: "Get",
+            url: "/video/CountByDate"
+        });
+    };
+    this.getUser = function () {
+        return $http({
+            method: "Get",
+            url: "/me"
+        });
+    };
+
+    this.getVidsByUser = function (id) {
+        return $http({
+            method: "Get",
+            url: "/videos/" + id + "/"
+        });
+    };
+
+    this.changeTitle = function (id, title) {
+        console.log('doing a put request on title');
+        return $http({
+            method: "Put",
+            url: "/video/" + id + "/getvideo",
+            data: {
+                title: title
             }
         });
     };

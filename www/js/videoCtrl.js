@@ -2,7 +2,7 @@ app.controller('videoCtrl', function($scope, $stateParams, videoSrvc) {
     $scope.getVideo = function() {
         videoSrvc.getVideo($stateParams.id).then(function(video) {
             $scope.curVideo = video.data[0];
-            $scope.curVideo.vidlink = $scope.curVideo.vidlink.replace("../www/", "../")
+            // $scope.curVideo.vidlink = $scope.curVideo.vidlink.replace("../www/", "../")
             console.log($scope.curVideo);
         })
     }

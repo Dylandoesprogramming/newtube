@@ -83,12 +83,12 @@ passport.deserializeUser(function(user, done) {
 
 // Return user object from session
 app.get('/me', function(req, res) {
-    res.send(req.user)
+    res.send(req.user.user)
 })
 
 app.get('/auth/logout', function(req, res) {
     req.logout();
-    res.redirect('/');
+    res.redirect('https://dylandoesprogramming.auth0.com/v2/logout');
     console.log(req.user)
 })
 
@@ -103,25 +103,38 @@ app.post('/', function(req, res) {
         var userId = req.user.user.userid;
         console.log('User Found')
         form.on('fileBegin', function(name, file) {
-            if (file.name.indexOf('.mp4') > 0) {
+            if (file.name.indexOf('.mp4') > 0 || file.name.indexOf('.MP4') > 0) {
                 console.log('file is mp4')
-                app.get('db').getVideoByName(file.name).then(function(video) {
-                    "got videos by name"
-                    if (video[0]) {
-                        if (video[0].filename == file.name) {
-                            console.log("renaming video")
-                            file.name = file.name.slice(0, file.name.length - 4);
-                            file.name = file.name + "re";
-                            file.name = file.name + ".mp4";
+                var checkName = function() {
+                    app.get('db').getVideoByName(file.name).then(function(video) {
+                        console.log("got videos by name");
+                        if (video[0]) {
+                            console.log(video[0])
+                            if (video[0].filename == file.name && file.name.indexOf('.mp4')) {
+                                console.log("renaming video")
+                                file.name = file.name.slice(0, file.name.length - 4);
+                                file.name = file.name + "re";
+                                file.name = file.name + ".mp4";
+                            } else if (video[0].filename == file.name) {
+                                console.log("renaming video")
+                                file.name = file.name.slice(0, file.name.length - 4);
+                                file.name = file.name + "re";
+                                file.name = file.name + ".MP4";
+                            }
+                            return checkName();
                         }
-                    }
-                    console.log('setting path')
-                    form.uploadDir = __dirname + '/www/uploads/'
-                    fs.rename(file.path, form.uploadDir + "/" + file.name, function(err) {
-                        console.log("ERROR: " + err);
+
+                        console.log('setting path')
+                        form.uploadDir = __dirname + '/www/uploads/'
+                        fs.rename(file.path, form.uploadDir + "/" + file.name, function(err) {
+                            console.log("ERROR: " + err);
+                        });
+                        app.get('db').createVideo(file.name, "../www/uploads/" + file.name, new Date(), userId, "blank", file.name);
+
                     });
-                    app.get('db').createVideo(file.name, "../www/uploads/" + file.name, new Date(), userId, "blank", file.name);
-                })
+                }
+
+                checkName()
             } else {
                 console.log("NOT A VIDEO!");
             }
@@ -135,14 +148,18 @@ app.post('/', function(req, res) {
         res.sendFile(__dirname + '/www/index.html');
     } else {
         console.log("NOT LOGGED IN!")
-        res.status(400).send('Not Logged In!')
+        res.redirect("/auth")
+            // res.status(400).send('Not Logged In!')
     }
 });
 
 
-app.get('/dashboard/video', homeCtrl.getAnalytics);
+app.get('/dashboard/video/:id/analytics', homeCtrl.getAnalytics);
 app.get('/video/:id/getvideo', homeCtrl.getVideo);
-app.get('/video/:id/getcomments', homeCtrl.getComments)
-app.get("/search", homeCtrl.getUsers);
+app.get('/video/CountByDate', homeCtrl.getVideosByDate);
+app.get('/video/:id/getcomments', homeCtrl.getComments);
+app.get('/videos/:id', homeCtrl.getVidsByUser);
+app.get("/search/searchQuery", homeCtrl.searchVideos);
 app.post('/video/:id/comments', homeCtrl.postComment)
+app.put('/video/:id/getvideo', homeCtrl.changeTitle);
 app.listen(3001, () => console.log('listening port 3001'));

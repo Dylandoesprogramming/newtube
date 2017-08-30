@@ -22,4 +22,40 @@ app.service('videoSrvc', function($http) {
             }
         });
     }
+    this.getVideoByQuery = function(searchQuery) {
+        return $http({
+            method: "Get",
+            url: "/search/searchQuery?searchQuery=" + searchQuery
+        });
+    }
+    this.getNewest = function() {
+        return $http({
+            method: "Get",
+            url: "/video/CountByDate"
+        })
+    }
+    this.getUser = function() {
+        return $http({
+            method: "Get",
+            url: "/me"
+        })
+    }
+
+    this.getVidsByUser = function(id) {
+        return $http({
+            method: "Get",
+            url: "/videos/" + id + "/"
+        })
+    }
+
+    this.changeTitle = function(id, title) {
+        console.log('doing a put request on title');
+        return $http({
+            method: "Put",
+            url: "/video/" + id + "/getvideo",
+            data: {
+                title: title
+            }
+        })
+    }
 });

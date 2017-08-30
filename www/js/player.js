@@ -5,7 +5,7 @@ app.directive('player', function() {
         link: function(scope, elem, attrs) {
             var mediaPlayer;
             mediaPlayer = document.getElementById('video');
-            console.log(mediaPlayer);
+            // console.log(mediaPlayer);
             mediaPlayer.controls = false;
             var seekBar = document.getElementById("seek-bar");
             var playbtn = document.getElementById('play-pause-button');
@@ -70,7 +70,7 @@ app.directive('player', function() {
                     scope.seconds = 0;
                     scope.seconds = Math.round(mediaPlayer.currentTime);
                     scope.seconds = convert(scope.seconds);
-                    console.log(scope.seconds)
+                    // console.log(scope.seconds)
                 })
             });
 

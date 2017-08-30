@@ -26,17 +26,43 @@ module.exports = {
         db.getVideo(req.params.id)
             .then(function(video) {
                 console.log(video);
+                video[0].vidlink = video[0].vidlink.replace("../www/", "../");
                 res.status(200).send(video)
             })
     },
     postComment: function(req, res, next) {
         const db = req.app.get('db');
-        console.log("Posting Comment")
-        let userId = req.user.user.userid
-        db.postComment(req.body.comment, req.params.id, userId)
-            .then(function() {
-                console.log("I madeit to resolve");
-                res.status(200).send();
-            })
+        if (req.user) {
+            console.log("Posting Comment")
+            let userId = req.user.user.userid
+            db.postComment(req.body.comment, req.params.id, userId)
+                .then(function() {
+                    res.status(200).send();
+                })
+        } else {
+            console.log("NOT LOGGED IN")
+        }
+    },
+    searchVideos: function(req, res, next) {
+        const db = req.app.get('db');
+        let searchQuery = req.query.searchQuery;
+        console.log(searchQuery);
+        searchQuery = "%" + searchQuery + "%";
+        db.searchVideos(searchQuery).then((videos) => res.status(200).send(videos))
+    },
+    getVideosByDate: function(req, res, next) {
+        const db = req.app.get('db');
+        db.getVideosByDate().then((videos) => res.status(200).send(videos))
+    },
+    getVidsByUser: function(req, res, next) {
+        const db = req.app.get('db');
+        db.getVidsByUser(req.params.id).then((videos) => res.status(200).send(videos))
+    },
+    changeTitle: function(req, res, next) {
+        const db = req.app.get('db');
+        db.changeTitle(req.params.id, req.body.title).then(function(video) {
+            video[0].vidlink = video[0].vidlink.replace("../www/", "../");
+            res.status(200).send(video);
+        })
     }
 }

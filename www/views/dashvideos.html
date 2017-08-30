@@ -1,0 +1,10 @@
+<topbar>
+</topbar>
+<div ng-if="user">
+    <form ng-submit="changeTitle(typedTitle)">
+        <h1 id="headTitle">Title:
+            <input type="text" ng-model="typedTitle" id="typedTitle">
+        </h1>
+    </form>
+    <player></player>
+</div>

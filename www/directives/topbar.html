@@ -1,9 +1,14 @@
 <div id="topbar">
     <div id=hamburger class="fa fa-bars"></div>
     <a ui-sref="home"><img id="logo" ng-src="../img/newtube.png"></a>
-    <div id="searchbar"><input id="search" type="text" placeholder="Search"><button type="submit" id="searchBut" class="fa fa-search"></button></div>
-    <div id="signin">
-        <a href="/auth"><button type="button" >Login</button></a>
-        <a href="/auth/logout"><button type="button" >Logout</button></a>
+    <div id="searchbar">
+        <input id="search" type="text" ng-model="searchQuery" placeholder="Search">
+        <a href="/#!/search?searchQuery={{searchQuery}}"><button type="submit" id="searchBut" class="fa fa-search"></button></a>
     </div>
+
+    <div id="signin">
+        <a href="/auth "><button type="button " >Login</button></a>
+        <a href="/auth/logout "><button type="button ">Logout</button></a>
+    </div>
+
 </div>

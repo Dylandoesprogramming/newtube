@@ -14,6 +14,21 @@ let app = angular.module('newtube', ['ui.router'])
                 templateUrl: '../views/video.html',
                 controller: 'videoCtrl',
             })
+            .state('search', {
+                url: '/search?searchQuery',
+                templateUrl: '../views/search.html',
+                controller: 'searchCtrl',
+            })
+            .state('dashboard', {
+                url: '/dashboard',
+                templateUrl: '../views/dashboard.html',
+                controller: 'dashboardCtrl',
+            })
+            .state('dashvideos', {
+                url: '/dashboard/:id',
+                templateUrl: '../views/dashvideos.html',
+                controller: 'dashVidCtrl',
+            })
 
         $urlRouterProvider.otherwise('/')
     });

@@ -115,3 +115,6 @@ body {
 
 #topbar:hover #hamburger {
   color: grey; }
+
+#typedTitle {
+  font-size: 32px; }
