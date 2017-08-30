@@ -1,6 +1,12 @@
 <div id="searchpage">
     <topbar></topbar>
     <ul>
-        <li ng-repeat="result in results"><a href="/#!/video/{{result.vidid}}">{{result.title}}</a></li>
+        <li class="videos" ng-repeat="result in results">
+            <a href="/#!/video/{{result.vidid}}">
+                {{result.title}}
+                <br/>
+                <img ng-src={{result.thumbnail}} id="thumbnail">
+            </a>
+        </li>
     </ul>
 </div>

@@ -129,7 +129,7 @@ app.post('/', function(req, res) {
                         fs.rename(file.path, form.uploadDir + "/" + file.name, function(err) {
                             console.log("ERROR: " + err);
                         });
-                        app.get('db').createVideo(file.name, "../www/uploads/" + file.name, new Date(), userId, "blank", file.name);
+                        app.get('db').createVideo(file.name, "../www/uploads/" + file.name, new Date(), userId, "blank", file.name, "../img/thumb.png");
 
                     });
                 }
@@ -161,5 +161,106 @@ app.get('/video/:id/getcomments', homeCtrl.getComments);
 app.get('/videos/:id', homeCtrl.getVidsByUser);
 app.get("/search/searchQuery", homeCtrl.searchVideos);
 app.post('/video/:id/comments', homeCtrl.postComment)
-app.put('/video/:id/getvideo', homeCtrl.changeTitle);
+app.put('/video/:id/getvideo/title', homeCtrl.changeTitle);
+app.put('/video/:id/getvideo/descr', homeCtrl.changeDescr);
+app.delete('/video/:id/getvideo', homeCtrl.deleteVideo);
+
+app.get('/file-upload', function(req, res) {
+    res.sendFile(__dirname + '/www/index.html');
+});
+
+app.post('/file-upload/:id', function(req, res) {
+
+    var form = new formidable.IncomingForm();
+    form.parse(req);
+    if (req.user) {
+        var userId = req.user.user.userid;
+        console.log('User Found')
+        form.on('fileBegin', function(name, file) {
+            if (file.name.indexOf('.png') > 0 || file.name.indexOf('.PNG') > 0) {
+                console.log('file is png')
+                var checkName = function() {
+                    var checkFile = "../img/" + file.name;
+                    app.get('db').getVideoByThumb(checkFile).then(function(video) {
+                        console.log("got videos by thumb");
+                        // console.log(video);
+                        if (video[0]) {
+                            // console.log(video[0])
+                            console.log(video[0].thumbnail + ":" + checkFile);
+                            if (video[0].thumbnail == checkFile && file.name.indexOf('.png')) {
+                                console.log("renaming img")
+                                file.name = file.name.slice(0, file.name.length - 4);
+                                file.name = file.name + "re";
+                                file.name = file.name + ".png";
+                            } else if (video[0].thumbnail == checkFile) {
+                                console.log("renaming img")
+                                file.name = file.name.slice(0, file.name.length - 4);
+                                file.name = file.name + "re";
+                                file.name = file.name + ".PNG";
+                            }
+                            return checkName();
+                        }
+
+                        console.log('setting path')
+                        form.uploadDir = __dirname + '/www/img/'
+                        fs.rename(file.path, form.uploadDir + "/" + file.name, function(err) {
+                            console.log("ERROR: " + err);
+                        });
+                        app.get('db').changeThumbnail(req.params.id, "../img/" + file.name).then(function(video) {
+                            video[0].vidlink = video[0].vidlink.replace("../www/", "../");
+                            res.status(200).send();
+                        });
+                    });
+                }
+
+                checkName()
+            } else {
+                console.log("NOT A IMAGE!");
+            }
+        });
+
+        form.on('file', function(name, file) {
+            console.log(file.name)
+            console.log('Uploaded ' + file.name);
+        });
+
+        res.redirect("/#!/dashboard");
+    } else {
+        console.log("NOT LOGGED IN!")
+        res.redirect("/auth")
+            // res.status(400).send('Not Logged In!')
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // var form = new formidable.IncomingForm();
+
+    // form.parse(req);
+
+    // form.on('fileBegin', function(name, file) {
+    //     file.path = __dirname + '/www/img/' + file.name;
+    // });
+
+    // form.on('file', function(name, file) {
+    //     console.log('Uploaded ' + file.name);
+    // });
+
+    // res.redirect("/#!/dashboard");
+});
+
 app.listen(3001, () => console.log('listening port 3001'));

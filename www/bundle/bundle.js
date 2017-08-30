@@ -30,7 +30,7 @@ var app = angular.module('newtube', ['ui.router']).config(function ($stateProvid
 });
 "use strict";
 
-app.controller('dashVidCtrl', function ($scope, $stateParams, videoSrvc) {
+app.controller('dashVidCtrl', function ($scope, $stateParams, $state, videoSrvc) {
     $scope.vidid = $stateParams.id;
     $scope.getUser = function () {
         videoSrvc.getUser().then(function (user) {
@@ -49,6 +49,7 @@ app.controller('dashVidCtrl', function ($scope, $stateParams, videoSrvc) {
                     $scope.curVideo = video.data[0];
                     // $scope.curVideo.vidlink = $scope.curVideo.vidlink.replace("../www/", "../")
                     $scope.typedTitle = $scope.curVideo.title;
+                    $scope.typedDescr = $scope.curVideo.descr;
                     console.log($scope.curVideo);
                 } else {
                     console.log("stop haxor!");
@@ -67,6 +68,35 @@ app.controller('dashVidCtrl', function ($scope, $stateParams, videoSrvc) {
                         $scope.curVideo = video.data[0];
                         console.log(video);
                         $scope.typedTitle = $scope.curVideo.title;
+                        $scope.typedDescr = $scope.curVideo.descr;
+                    });
+                }
+            }
+        }
+    };
+
+    $scope.changeDescr = function (descr) {
+        if ($scope.user) {
+            if ($scope.curVideo) {
+                if (descr) {
+                    videoSrvc.changeDescr($scope.vidid, descr).then(function (video) {
+                        $scope.curVideo = video.data[0];
+                        console.log(video);
+                        $scope.typedTitle = $scope.curVideo.title;
+                        $scope.typedDescr = $scope.curVideo.descr;
+                    });
+                }
+            }
+        }
+    };
+
+    $scope.deleteVideo = function () {
+        if ($scope.user) {
+            if ($scope.curVideo) {
+                var confirmed = window.confirm("You are about to DELETE this video, are you sure?");
+                if (confirmed) {
+                    videoSrvc.deleteVideo($scope.vidid).then(function () {
+                        $state.go('dashboard');
                     });
                 }
             }
@@ -97,7 +127,7 @@ app.controller('dashboardCtrl', function ($scope, $stateParams, videoSrvc) {
 app.controller('homeCtrl', function ($scope, $stateParams, videoSrvc) {
     $scope.getNewest = function () {
         videoSrvc.getNewest().then(function (videos) {
-            $scope.newest = videos.data;
+            $scope.newestVids = videos.data;
             console.log($scope.newest);
         });
     };
@@ -374,10 +404,27 @@ app.service('videoSrvc', function ($http) {
         console.log('doing a put request on title');
         return $http({
             method: "Put",
-            url: "/video/" + id + "/getvideo",
+            url: "/video/" + id + "/getvideo/title",
             data: {
                 title: title
             }
+        });
+    };
+
+    this.changeDescr = function (id, descr) {
+        console.log("doing a put request on descr");
+        return $http({
+            method: "Put",
+            url: "/video/" + id + "/getvideo/descr",
+            data: {
+                descr: descr
+            }
+        });
+    };
+    this.deleteVideo = function (id) {
+        return $http({
+            method: "Delete",
+            url: "/video/" + id + "/getvideo"
         });
     };
 });

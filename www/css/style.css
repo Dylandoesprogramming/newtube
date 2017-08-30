@@ -72,7 +72,9 @@ body {
   top: 0;
   height: 50px;
   z-index: 2147483648;
-  border-bottom: 1px solid silver; }
+  border-bottom: 1px solid silver;
+  margin-bottom: 5%;
+  background-color: #fff; }
   #topbar #signin {
     float: right; }
   #topbar #hamburger {
@@ -116,5 +118,32 @@ body {
 #topbar:hover #hamburger {
   color: grey; }
 
-#typedTitle {
+#dashvids #thumbnail {
+  width: 25%; }
+
+#dashvids #typedTitle {
   font-size: 32px; }
+
+#searchpage .videos {
+  list-style: none; }
+
+#searchpage #thumbnail {
+  width: 25%; }
+
+#home #newest {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none; }
+
+#home #thumbnail {
+  width: 100%; }
+
+#home .videos {
+  width: 15%;
+  padding: 0 1%; }
+
+#uservids .uservid {
+  list-style: none; }
+
+#uservids #thumbnail {
+  width: 25%; }

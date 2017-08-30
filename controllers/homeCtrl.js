@@ -64,5 +64,18 @@ module.exports = {
             video[0].vidlink = video[0].vidlink.replace("../www/", "../");
             res.status(200).send(video);
         })
-    }
+    },
+    changeDescr: function(req, res, next) {
+        const db = req.app.get('db');
+        db.changeDescr(req.params.id, req.body.descr).then(function(video) {
+            video[0].vidlink = video[0].vidlink.replace("../www/", "../");
+            res.status(200).send(video);
+        })
+    },
+    deleteVideo: function(req, res, next) {
+        const db = req.app.get('db');
+        db.deleteVideo(req.params.id).then(function() {
+            res.status(200).send();
+        })
+    },
 }

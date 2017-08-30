@@ -52,10 +52,27 @@ app.service('videoSrvc', function($http) {
         console.log('doing a put request on title');
         return $http({
             method: "Put",
-            url: "/video/" + id + "/getvideo",
+            url: "/video/" + id + "/getvideo/title",
             data: {
                 title: title
             }
+        })
+    }
+
+    this.changeDescr = function(id, descr) {
+        console.log("doing a put request on descr");
+        return $http({
+            method: "Put",
+            url: "/video/" + id + "/getvideo/descr",
+            data: {
+                descr: descr
+            }
+        })
+    }
+    this.deleteVideo = function(id) {
+        return $http({
+            method: "Delete",
+            url: "/video/" + id + "/getvideo",
         })
     }
 });

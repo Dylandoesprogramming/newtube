@@ -86,6 +86,8 @@ body {
     height: 50px;
     z-index: 2147483648;
     border-bottom: 1px solid silver;
+    margin-bottom: 5%;
+    background-color: #fff;
     #signin {
         float: right;
     }
@@ -141,6 +143,45 @@ body {
     }
 }
 
-#typedTitle {
-    font-size: 32px;
+#dashvids {
+    #thumbnail {
+        width: 25%;
+    }
+    #typedTitle {
+        font-size: 32px;
+    }
+}
+
+#searchpage {
+    .videos {
+        list-style: none;
+    }
+    #thumbnail {
+        width: 25%;
+    }
+}
+
+#home {
+    #newest {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+    }
+    #thumbnail {
+        width: 100%;
+        // display: inline;
+    }
+    .videos {
+        width: 15%;
+        padding: 0 1%;
+    }
+}
+
+#uservids {
+    .uservid {
+        list-style: none;
+    }
+    #thumbnail {
+        width: 25%;
+    }
 }

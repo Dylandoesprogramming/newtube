@@ -1,10 +1,26 @@
 <topbar>
 </topbar>
-<div ng-if="user">
+<div id="dashvids" ng-if="user">
     <form ng-submit="changeTitle(typedTitle)">
         <h1 id="headTitle">Title:
             <input type="text" ng-model="typedTitle" id="typedTitle">
         </h1>
     </form>
     <player></player>
+    <form id="changeDescr">
+        <textarea rows="10" cols="50" ng-model="typedDescr" id="typedDescr"></textarea>
+        <button type="submit" id="subDescr" ng-click="changeDescr(typedDescr)">Submit</button>
+    </form>
+
+    <h2 id="headThumbnail">Thumbnail:
+        <img id="thumbnail" ng-src={{curVideo.thumbnail}}>
+    </h2>
+    <form method="post" enctype="multipart/form-data" action="{{'/file-upload/' + vidid}}">
+        <input type="file" name="thumbnail">
+        <input type="submit">
+    </form>
+
+    <button type="button" id="deleteVideo" style="background-color:red;" ng-click="deleteVideo()">
+        DELETE VIDEO
+    </button>
 </div>
