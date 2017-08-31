@@ -13,8 +13,8 @@
     </form>
 
     <h2 id="headThumbnail">Thumbnail:
-        <img id="thumbnail" ng-src={{curVideo.thumbnail}}>
     </h2>
+    <img id="thumbnail" ng-src={{curVideo.thumbnail}}>
     <form method="post" enctype="multipart/form-data" action="{{'/file-upload/' + vidid}}">
         <input type="file" name="thumbnail">
         <input type="submit">

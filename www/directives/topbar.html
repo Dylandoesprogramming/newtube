@@ -1,5 +1,5 @@
 <div id="topbar">
-    <div id=hamburger class="fa fa-bars"></div>
+    <div id=hamburger class="fa fa-bars" ui-sref="home"></div>
     <a ui-sref="home"><img id="logo" ng-src="../img/newtube.png"></a>
     <div id="searchbar">
         <input id="search" type="text" ng-model="searchQuery" placeholder="Search">
@@ -7,8 +7,9 @@
     </div>
 
     <div id="signin">
-        <a href="/auth "><button type="button " >Login</button></a>
-        <a href="/auth/logout "><button type="button ">Logout</button></a>
+        <p id="user" ng-if='user'>Signed in as: <a href="/#!/dashboard">{{user.username}}</a></p>
+        <a id="login" class="logBut" href="/auth "><button type="button " ng-if="!user">Login</button></a>
+        <a id="logout" class="logBut" href="/auth/logout "><button type="button" ng-if="user">Logout</button></a>
     </div>
 
 </div>

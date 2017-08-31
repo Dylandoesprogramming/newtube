@@ -1,4 +1,6 @@
 const express = require('express');
+const dotenv = require('dotenv');
+require('dotenv').config();
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const passport = require('passport');
@@ -13,6 +15,7 @@ const homeCtrl = require("./controllers/homeCtrl")
 const app = module.exports = express();
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({
     resave: true, //Without this you get a constant warning about default values
     saveUninitialized: true, //Without this you get a constant warning about default values
@@ -92,13 +95,14 @@ app.get('/auth/logout', function(req, res) {
     console.log(req.user)
 })
 
-app.get('/', function(req, res, next) {
+app.get('/upload', function(req, res, next) {
     res.sendFile(__dirname + '/www/index.html');
 })
 
-app.post('/', function(req, res) {
+app.post('/upload', function(req, res) {
     var form = new formidable.IncomingForm();
     form.parse(req);
+    // console.log("REQ: " + req.body);
     if (req.user) {
         var userId = req.user.user.userid;
         console.log('User Found')
@@ -145,7 +149,7 @@ app.post('/', function(req, res) {
             console.log('Uploaded ' + file.name);
         });
 
-        res.sendFile(__dirname + '/www/index.html');
+        res.redirect("/#!/dashboard/upload");
     } else {
         console.log("NOT LOGGED IN!")
         res.redirect("/auth")
@@ -263,4 +267,5 @@ app.post('/file-upload/:id', function(req, res) {
     // res.redirect("/#!/dashboard");
 });
 
-app.listen(3001, () => console.log('listening port 3001'));
+// app.listen(3001, () => console.log('listening port 3001'));
+app.listen(process.env.PORT, () => console.log('listening port 3001'));

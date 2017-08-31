@@ -1,19 +1,18 @@
 <div id="home">
     <topbar>
     </topbar>
-    <h1>Home</h1>
+    <!-- <h1>Home</h1> -->
     <!-- <player></player> -->
     <ul id="newest">
         <li class="videos" ng-repeat="vid in newestVids">
-            <a href="/#!/video/{{result.vidid}}">
-            {{vid.title}}
-            <br/>
-            <img ng-src={{vid.thumbnail}} id="thumbnail">
+            <a href="/#!/video/{{vid.vidid}}">
+                <img ng-src={{vid.thumbnail}} id="thumbnail">
+                <br/> {{vid.title}}
             </a>
         </li>
     </ul>
-    <form action="/" enctype="multipart/form-data" method="post">
+    <!-- <form action="/" enctype="multipart/form-data" method="post">
         <input type="file" name="upload" multiple>
         <input type="submit" value="Upload">
-    </form>
+    </form> -->
 </div>

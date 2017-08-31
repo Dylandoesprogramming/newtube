@@ -20,6 +20,15 @@ app.controller('videoCtrl', function($scope, $stateParams, videoSrvc) {
         }
         $scope.curComment = "";
     }
+    $scope.getUser = function() {
+        videoSrvc.getUser().then(function(user) {
+            if (user) {
+                $scope.user = user.data;
+                console.log($scope.user)
+            }
+        })
+    }
+    $scope.getUser();
     $scope.getVideo();
 
     $scope.getComments();

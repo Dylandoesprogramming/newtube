@@ -25,9 +25,14 @@ let app = angular.module('newtube', ['ui.router'])
                 controller: 'dashboardCtrl',
             })
             .state('dashvideos', {
-                url: '/dashboard/:id',
+                url: '/dashboard/video/:id',
                 templateUrl: '../views/dashvideos.html',
                 controller: 'dashVidCtrl',
+            })
+            .state('upload', {
+                url: '/dashboard/upload',
+                templateUrl: '../views/upload.html',
+                controller: 'uploadCtrl',
             })
 
         $urlRouterProvider.otherwise('/')

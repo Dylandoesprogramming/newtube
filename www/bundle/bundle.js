@@ -21,9 +21,13 @@ var app = angular.module('newtube', ['ui.router']).config(function ($stateProvid
         templateUrl: '../views/dashboard.html',
         controller: 'dashboardCtrl'
     }).state('dashvideos', {
-        url: '/dashboard/:id',
+        url: '/dashboard/video/:id',
         templateUrl: '../views/dashvideos.html',
         controller: 'dashVidCtrl'
+    }).state('upload', {
+        url: '/dashboard/upload',
+        templateUrl: '../views/upload.html',
+        controller: 'uploadCtrl'
     });
 
     $urlRouterProvider.otherwise('/');
@@ -128,9 +132,20 @@ app.controller('homeCtrl', function ($scope, $stateParams, videoSrvc) {
     $scope.getNewest = function () {
         videoSrvc.getNewest().then(function (videos) {
             $scope.newestVids = videos.data;
-            console.log($scope.newest);
+            console.log($scope.newestVids);
         });
     };
+
+    $scope.getUser = function () {
+        videoSrvc.getUser().then(function (user) {
+            if (user) {
+                $scope.user = user.data;
+                console.log($scope.user);
+            }
+        });
+    };
+
+    $scope.getUser();
     $scope.getNewest();
 });
 'use strict';
@@ -310,6 +325,15 @@ app.controller('searchCtrl', function ($scope, $stateParams, videoSrvc) {
             $scope.results = results.data;
         });
     };
+    $scope.getUser = function () {
+        videoSrvc.getUser().then(function (user) {
+            if (user) {
+                $scope.user = user.data;
+                console.log($scope.user);
+            }
+        });
+    };
+    $scope.getUser();
     $scope.getResults();
 });
 'use strict';
@@ -319,6 +343,19 @@ app.directive('topbar', function () {
         Restrict: 'E',
         templateUrl: '../directives/topbar.html'
     };
+});
+'use strict';
+
+app.controller('uploadCtrl', function ($scope, $stateParams, videoSrvc) {
+    $scope.getUser = function () {
+        videoSrvc.getUser().then(function (user) {
+            if (user) {
+                $scope.user = user.data;
+                console.log($scope.user);
+            }
+        });
+    };
+    $scope.getUser();
 });
 "use strict";
 
@@ -344,6 +381,15 @@ app.controller('videoCtrl', function ($scope, $stateParams, videoSrvc) {
         }
         $scope.curComment = "";
     };
+    $scope.getUser = function () {
+        videoSrvc.getUser().then(function (user) {
+            if (user) {
+                $scope.user = user.data;
+                console.log($scope.user);
+            }
+        });
+    };
+    $scope.getUser();
     $scope.getVideo();
 
     $scope.getComments();

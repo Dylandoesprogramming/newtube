@@ -6,5 +6,14 @@ app.controller('searchCtrl', function($scope, $stateParams, videoSrvc) {
             $scope.results = results.data;
         });
     }
+    $scope.getUser = function() {
+        videoSrvc.getUser().then(function(user) {
+            if (user) {
+                $scope.user = user.data;
+                console.log($scope.user)
+            }
+        })
+    }
+    $scope.getUser();
     $scope.getResults();
 });
