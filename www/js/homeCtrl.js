@@ -10,6 +10,7 @@ app.controller('homeCtrl', function($scope, $stateParams, videoSrvc) {
         videoSrvc.getUser().then(function(user) {
             if (user) {
                 $scope.user = user.data;
+                $scope.user.username = $scope.user.username.charAt(0).toUpperCase() + $scope.user.username.slice(1);
                 console.log($scope.user)
             }
         })

@@ -1,1 +1,1 @@
-SELECT * FROM videos WHERE title LIKE $1;
+SELECT * FROM videos WHERE title ILIKE $1;

@@ -15,7 +15,6 @@ const homeCtrl = require("./controllers/homeCtrl")
 const app = module.exports = express();
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({
     resave: true, //Without this you get a constant warning about default values
     saveUninitialized: true, //Without this you get a constant warning about default values
@@ -103,10 +102,12 @@ app.post('/upload', function(req, res) {
     var form = new formidable.IncomingForm();
     form.parse(req);
     // console.log("REQ: " + req.body);
+
     if (req.user) {
         var userId = req.user.user.userid;
         console.log('User Found')
         form.on('fileBegin', function(name, file) {
+            console.log("FORM RECEIVED: " + form)
             if (file.name.indexOf('.mp4') > 0 || file.name.indexOf('.MP4') > 0) {
                 console.log('file is mp4')
                 var checkName = function() {
@@ -148,7 +149,7 @@ app.post('/upload', function(req, res) {
             console.log(file.name)
             console.log('Uploaded ' + file.name);
         });
-
+        app.get('db').getRecent(userId)
         res.redirect("/#!/dashboard/upload");
     } else {
         console.log("NOT LOGGED IN!")
@@ -164,9 +165,12 @@ app.get('/video/CountByDate', homeCtrl.getVideosByDate);
 app.get('/video/:id/getcomments', homeCtrl.getComments);
 app.get('/videos/:id', homeCtrl.getVidsByUser);
 app.get("/search/searchQuery", homeCtrl.searchVideos);
+app.get("/users/:id", homeCtrl.getUserById)
+app.get("/users/:id/recent", homeCtrl.getRecent)
 app.post('/video/:id/comments', homeCtrl.postComment)
 app.put('/video/:id/getvideo/title', homeCtrl.changeTitle);
 app.put('/video/:id/getvideo/descr', homeCtrl.changeDescr);
+app.put('/video/:id/update', homeCtrl.updateVideo);
 app.delete('/video/:id/getvideo', homeCtrl.deleteVideo);
 
 app.get('/file-upload', function(req, res) {
@@ -234,38 +238,7 @@ app.post('/file-upload/:id', function(req, res) {
         res.redirect("/auth")
             // res.status(400).send('Not Logged In!')
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // var form = new formidable.IncomingForm();
-
-    // form.parse(req);
-
-    // form.on('fileBegin', function(name, file) {
-    //     file.path = __dirname + '/www/img/' + file.name;
-    // });
-
-    // form.on('file', function(name, file) {
-    //     console.log('Uploaded ' + file.name);
-    // });
-
-    // res.redirect("/#!/dashboard");
 });
 
-// app.listen(3001, () => console.log('listening port 3001'));
-app.listen(process.env.PORT, () => console.log('listening port 3001'));
+app.listen(3001, () => console.log('listening port 3001'));
+// app.listen(process.env.PORT, () => console.log('listening port 3001'));

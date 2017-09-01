@@ -40,6 +40,7 @@ app.controller('dashVidCtrl', function ($scope, $stateParams, $state, videoSrvc)
         videoSrvc.getUser().then(function (user) {
             if (user) {
                 $scope.user = user.data;
+                $scope.user.username = $scope.user.username.charAt(0).toUpperCase() + $scope.user.username.slice(1);
                 $scope.getVideo($scope.vidid);
             }
         });
@@ -116,6 +117,7 @@ app.controller('dashboardCtrl', function ($scope, $stateParams, videoSrvc) {
     $scope.getUser = function () {
         videoSrvc.getUser().then(function (user) {
             $scope.user = user.data;
+            $scope.user.username = $scope.user.username.charAt(0).toUpperCase() + $scope.user.username.slice(1);
             $scope.getVidsByUser($scope.user);
         });
     };
@@ -140,6 +142,7 @@ app.controller('homeCtrl', function ($scope, $stateParams, videoSrvc) {
         videoSrvc.getUser().then(function (user) {
             if (user) {
                 $scope.user = user.data;
+                $scope.user.username = $scope.user.username.charAt(0).toUpperCase() + $scope.user.username.slice(1);
                 console.log($scope.user);
             }
         });
@@ -321,14 +324,15 @@ app.controller('searchCtrl', function ($scope, $stateParams, videoSrvc) {
     $scope.getResults = function () {
         console.log($stateParams);
         videoSrvc.getVideoByQuery($stateParams.searchQuery).then(function (results) {
-            // console.log(results.data);
             $scope.results = results.data;
+            $scope.resultCount = $scope.results.length;
         });
     };
     $scope.getUser = function () {
         videoSrvc.getUser().then(function (user) {
             if (user) {
                 $scope.user = user.data;
+                $scope.user.username = $scope.user.username.charAt(0).toUpperCase() + $scope.user.username.slice(1);
                 console.log($scope.user);
             }
         });
@@ -346,31 +350,82 @@ app.directive('topbar', function () {
 });
 'use strict';
 
-app.controller('uploadCtrl', function ($scope, $stateParams, videoSrvc) {
+app.controller('uploadCtrl', function ($scope, $stateParams, $location, videoSrvc) {
     $scope.getUser = function () {
         videoSrvc.getUser().then(function (user) {
             if (user) {
                 $scope.user = user.data;
+                $scope.user.username = $scope.user.username.charAt(0).toUpperCase() + $scope.user.username.slice(1);
                 console.log($scope.user);
+                $scope.getRecent();
             }
         });
+    };
+
+    $scope.getRecent = function () {
+        console.log('getting recent');
+        if ($scope.user) {
+            console.log('found user');
+            videoSrvc.getRecent($scope.user.userid).then(function (video) {
+                if ($scope.curFile) {
+                    videoSrvc.updateVideo(video.data[0].vidid, $scope.newTitle, $scope.newDescr).then(function () {
+                        videoSrvc.getRecent($scope.user.userid).then(function (video) {
+                            $location.url('/dashboard/video/' + video.data[0].vidid);
+                        });
+                    });
+                }
+            });
+        }
+    };
+    $scope.postFile = function () {
+        $scope.curFile = document.getElementById('file').files[0];
+        if ($scope.curFile) {
+            console.log('We gots a file mang');
+            console.log($scope.curFile);
+            var fd = new FormData();
+            fd.append("file", $scope.curFile);
+            if ($scope.newTitle && $scope.newDescr) {
+                videoSrvc.postFile(fd).then(function () {
+                    $scope.getRecent();
+                });
+            }
+        }
     };
     $scope.getUser();
 });
 "use strict";
 
 app.controller('videoCtrl', function ($scope, $stateParams, videoSrvc) {
+    $scope.showDetails = false;
     $scope.getVideo = function () {
         videoSrvc.getVideo($stateParams.id).then(function (video) {
             $scope.curVideo = video.data[0];
             // $scope.curVideo.vidlink = $scope.curVideo.vidlink.replace("../www/", "../")
-            console.log($scope.curVideo);
+            // console.log($scope.curVideo);
+        });
+    };
+    $scope.getUserById = function (id) {
+        videoSrvc.getUserById(id).then(function (user) {
+            $scope.tempuser = user.data;
         });
     };
     $scope.getComments = function () {
         videoSrvc.getComments($stateParams.id).then(function (comments) {
-            console.log(comments.data);
-            return $scope.comments = comments.data;
+            // console.log(comments.data);
+            $scope.comments = comments.data.reverse();
+            for (var i = 0; i < $scope.comments.length; i++) {
+                videoSrvc.getUserById($scope.comments[i].userid).then(function (user) {
+                    var tempuser = user.data[0];
+                    tempuser.username = tempuser.username.charAt(0).toUpperCase() + tempuser.username.slice(1);
+                    // console.log(tempuser.username);
+                    for (var i = 0; i < $scope.comments.length; i++) {
+                        if (tempuser.userid == $scope.comments[i].userid) {
+                            $scope.comments[i].username = tempuser.username;
+                            console.log($scope.comments[i]);
+                        }
+                    }
+                });
+            }
         });
     };
     $scope.subComment = function (comment) {
@@ -385,7 +440,8 @@ app.controller('videoCtrl', function ($scope, $stateParams, videoSrvc) {
         videoSrvc.getUser().then(function (user) {
             if (user) {
                 $scope.user = user.data;
-                console.log($scope.user);
+                $scope.user.username = $scope.user.username.charAt(0).toUpperCase() + $scope.user.username.slice(1);
+                // console.log($scope.user)
             }
         });
     };
@@ -471,6 +527,36 @@ app.service('videoSrvc', function ($http) {
         return $http({
             method: "Delete",
             url: "/video/" + id + "/getvideo"
+        });
+    };
+    this.getUserById = function (id) {
+        return $http({
+            method: "Get",
+            url: "/users/" + id
+        });
+    };
+
+    this.getRecent = function (id) {
+        return $http({
+            method: "Get",
+            url: "/users/" + id + "/recent"
+        });
+    };
+    this.postFile = function (data) {
+        return $http.post("/upload", data, {
+            withCredentials: true,
+            headers: { 'Content-Type': undefined },
+            transformRequest: angular.identity
+        });
+    };
+    this.updateVideo = function (id, title, descr) {
+        return $http({
+            method: "Put",
+            url: "/video/" + id + "/update",
+            data: {
+                title: title,
+                descr: descr
+            }
         });
     };
 });

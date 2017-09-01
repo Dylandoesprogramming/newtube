@@ -1,11 +1,12 @@
 <div id="searchpage">
     <topbar></topbar>
+    <h2 id='resCount'>About {{resultCount}} results</h2>
     <ul>
         <li class="videos" ng-repeat="result in results">
             <a href="/#!/video/{{result.vidid}}">
-                {{result.title}}
+                <h2 class="title">{{result.title}}</h2>
                 <br/>
-                <img ng-src={{result.thumbnail}} id="thumbnail">
+                <img ng-src={{result.thumbnail}} class="thumbnail">
             </a>
         </li>
     </ul>

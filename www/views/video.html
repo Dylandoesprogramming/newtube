@@ -3,14 +3,18 @@
     </topbar>
     <player></player>
     <h2 id="title">{{curVideo.title}}</h2>
-    <p id="description">{{curVideo.descr}}</p>
-    <p id="upload-time">{{curVideo.uptime}}</p>
+    <p id="showDetails" ng-click="showDetails = true" ng-show="!showDetails">Show Video Details</p>
+    <div id="hideDetails" ng-show="showDetails">
+        <p id="description">{{curVideo.descr}}</p>
+        <p id="upload-time">{{curVideo.uptime}}</p>
+        <p id="hideDetails" ng-click="showDetails = false">Hide Video Details</p>
+    </div>
 
     <form id="comment-box">
-        <textarea rows="5" cols="20" placeholder="Enter a comment here." ng-model="curComment"></textarea>
+        <textarea rows="10" cols="50" placeholder="Enter a comment here." ng-model="curComment"></textarea>
         <button type="button" ng-click="subComment(curComment)">Submit</button>
     </form>
     <ul>
-        <li ng-repeat="comment in comments">{{comment.comment}}</li>
+        <li class="comments" ng-repeat="comment in comments">{{comment.comment}} <br/> -{{comment.username}}-</li>
     </ul>
 </div>

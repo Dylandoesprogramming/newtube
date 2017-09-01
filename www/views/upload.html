@@ -2,10 +2,14 @@
     <topbar>
     </topbar>
     <h1>Upload</h1>
-    <input type="text" id="newTitle" placeholder="Title">
+    <input type="text" id="newTitle" placeholder="Title" ng-model="newTitle">
     <textarea rows="10" cols="50" ng-model="newDescr" id="typedDescr" placeholder="description goes here."></textarea>
-    <form action="/upload" method="post">
-        <input type="file" name="upload">
-        <input type="submit" value="Upload">
+    <!-- <form method="post" enctype="multipart/form-data" action="/upload">
+        <input type="file" name="upload" id="file">
+        <input type="submit" value="upload">
+    </form> -->
+    <form enctype='multipart/form-data' ng-submit="postFile()">
+        <input type="file" name="upload" id="file">
+        <input type="submit" value="upload">
     </form>
 </div>

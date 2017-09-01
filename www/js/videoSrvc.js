@@ -75,4 +75,34 @@ app.service('videoSrvc', function($http) {
             url: "/video/" + id + "/getvideo",
         })
     }
+    this.getUserById = function(id) {
+        return $http({
+            method: "Get",
+            url: "/users/" + id,
+        })
+    }
+
+    this.getRecent = function(id) {
+        return $http({
+            method: "Get",
+            url: "/users/" + id + "/recent",
+        })
+    }
+    this.postFile = function(data) {
+        return $http.post("/upload", data, {
+            withCredentials: true,
+            headers: { 'Content-Type': undefined },
+            transformRequest: angular.identity
+        })
+    }
+    this.updateVideo = function(id, title, descr) {
+        return $http({
+            method: "Put",
+            url: "/video/" + id + "/update",
+            data: {
+                title: title,
+                descr: descr
+            }
+        })
+    }
 });

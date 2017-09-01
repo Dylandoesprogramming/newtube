@@ -4,6 +4,7 @@ app.controller('dashVidCtrl', function($scope, $stateParams, $state, videoSrvc) 
         videoSrvc.getUser().then(function(user) {
             if (user) {
                 $scope.user = user.data;
+                $scope.user.username = $scope.user.username.charAt(0).toUpperCase() + $scope.user.username.slice(1);
                 $scope.getVideo($scope.vidid);
             }
         })

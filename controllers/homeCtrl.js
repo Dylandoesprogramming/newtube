@@ -78,4 +78,26 @@ module.exports = {
             res.status(200).send();
         })
     },
+    getUserById: function(req, res, next) {
+        const db = req.app.get('db');
+        db.getUserById(req.params.id).then(function(user) {
+            res.status(200).send(user);
+        })
+    },
+    getRecent: function(req, res, next) {
+        const db = req.app.get('db');
+        db.getRecent(req.params.id).then(function(video) {
+            video[0].vidlink = video[0].vidlink.replace("../www/", "../");
+            res.status(200).send(video)
+        })
+    },
+    updateVideo: function(req, res, next) {
+        const db = req.app.get('db');
+        db.changeTitle(req.params.id, req.body.title).then(function() {
+            db.changeDescr(req.params.id, req.body.descr).then(function(video) {
+                // res.redirect("/#!/dashboard/video/" + req.params.id);
+                res.status(200).send();
+            })
+        })
+    }
 }

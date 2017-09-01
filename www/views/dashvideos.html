@@ -7,18 +7,22 @@
         </h1>
     </form>
     <player></player>
+    <h2 id="headDescr">Change Description</h2>
     <form id="changeDescr">
-        <textarea rows="10" cols="50" ng-model="typedDescr" id="typedDescr"></textarea>
+        <textarea rows="10" cols="50" ng-model="typedDescr" id="typedDescr"></textarea><br>
         <button type="submit" id="subDescr" ng-click="changeDescr(typedDescr)">Submit</button>
     </form>
 
-    <h2 id="headThumbnail">Thumbnail:
-    </h2>
-    <img id="thumbnail" ng-src={{curVideo.thumbnail}}>
-    <form method="post" enctype="multipart/form-data" action="{{'/file-upload/' + vidid}}">
-        <input type="file" name="thumbnail">
-        <input type="submit">
-    </form>
+    <h2 id="headThumbnail">Upload Thumbnail</h2>
+    <div id="subThumb">
+        <div id="thumbnailDiv">
+            <img id="thumbnail" ng-src={{curVideo.thumbnail}}>
+        </div>
+        <form id="thumbnailsub" method="post" enctype="multipart/form-data" action="{{'/file-upload/' + vidid}}">
+            <input type="file" name="thumbnail">
+            <input type="submit">
+        </form>
+    </div>
 
     <button type="button" id="deleteVideo" style="background-color:red;" ng-click="deleteVideo()">
         DELETE VIDEO

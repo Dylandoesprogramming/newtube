@@ -3,6 +3,7 @@ app.controller('dashboardCtrl', function($scope, $stateParams, videoSrvc) {
     $scope.getUser = function() {
         videoSrvc.getUser().then(function(user) {
             $scope.user = user.data;
+            $scope.user.username = $scope.user.username.charAt(0).toUpperCase() + $scope.user.username.slice(1);
             $scope.getVidsByUser($scope.user);
         })
     }

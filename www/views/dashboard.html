@@ -1,12 +1,11 @@
 <topbar>
 </topbar>
-<h1>Dashboard</h1>
+<h1 id="dashHead">{{user.username}}'s Dashboard</h1>
 <ul id="uservids">
     <li class="uservid" ng-repeat="video in videos">
         <a href="/#!/dashboard/video/{{video.vidid}}">
-            {{video.title}}
-            <br/>
             <img id="thumbnail" ng-src="{{video.thumbnail}}">
+            <br/> {{video.title}}
         </a>
     </li>
 </ul>

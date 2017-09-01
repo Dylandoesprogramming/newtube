@@ -2,14 +2,15 @@ app.controller('searchCtrl', function($scope, $stateParams, videoSrvc) {
     $scope.getResults = function() {
         console.log($stateParams);
         videoSrvc.getVideoByQuery($stateParams.searchQuery).then(function(results) {
-            // console.log(results.data);
             $scope.results = results.data;
+            $scope.resultCount = $scope.results.length;
         });
     }
     $scope.getUser = function() {
         videoSrvc.getUser().then(function(user) {
             if (user) {
                 $scope.user = user.data;
+                $scope.user.username = $scope.user.username.charAt(0).toUpperCase() + $scope.user.username.slice(1);
                 console.log($scope.user)
             }
         })

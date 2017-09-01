@@ -6,6 +6,8 @@ html {
 
 body {
     padding-top: 40px;
+    background-color: #FAFAFA;
+    font-family: 'Roboto', sans-serif;
 }
 
 #player {
@@ -119,6 +121,7 @@ body {
         height: 25px;
         width: 50%;
         #search {
+            font-family: 'Roboto', sans-serif;
             font-size: 1em;
             width: 75%;
             border: 1px solid #CCCCCC;
@@ -139,12 +142,22 @@ body {
     #user {
         position: absolute;
         right: 8%;
+        a {
+            text-decoration: none;
+            color: black;
+            border-bottom: 1px solid silver;
+        }
     }
     .logBut {
         position: absolute;
         right: 2%;
         top: 50%;
-        transform: translateY(-50%);
+        // transform: translateY(-50%);
+        font-family: 'Roboto', sans-serif;
+    }
+    #upload {
+        position: absolute;
+        right: 2%;
     }
 }
 
@@ -160,36 +173,92 @@ body {
     }
     #typedTitle {
         font-size: 32px;
+        text-align: center;
+        border: none;
     }
     #changeDescr {
+        // border: 1px solid silver;
         text-align: center;
     }
     #headTitle {
         text-align: center;
-        display: inline;
+        margin: 0;
+        margin-top: 1%;
+    }
+    #thumbnailDiv {
+        width: 100vw;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        // border: 1px solid black;
+        // border-bottom: none;
+    }
+    #thumbnailsub {
+        // display: block !important;
+        text-align: center;
+        // border: 1px solid black;
+        // border-top: none;
     }
     #headThumbnail {
+        text-align: center;
+    }
+    #deleteVideo {
+        margin-top: 10%;
+        display: block;
+        margin: 0 auto;
+    }
+    #subThumb {
+        // border: 1px solid silver;
+        margin-bottom: 5%;
+    }
+    #headDescr {
         text-align: center;
     }
 }
 
 #searchpage {
+    background-color: #FAFAFA;
     .videos {
         list-style: none;
     }
-    #thumbnail {
+    ul {
+        text-align: center;
+        margin: 0 auto;
+        border-top: 1px solid silver;
+    }
+    a {
+        text-decoration: none;
+    }
+    .title {
+        color: black;
+        margin: 0;
+        margin-top: 1%;
+    }
+    .thumbnail {
         width: 25%;
+    }
+    #resCount {
+        padding-top: 3%;
+        margin: 0;
     }
 }
 
 #home {
     #newest {
+        // border-top: 1px solid silver;
         display: flex;
         flex-wrap: wrap;
         list-style: none;
         align-items: center;
         justify-content: center;
         text-align: center;
+        margin-top: 0;
+    }
+    #newestHead {
+        text-align: center;
+        margin-bottom: 1%;
+        margin-top: 3%;
     }
     #thumbnail {
         width: 100%;
@@ -199,16 +268,71 @@ body {
         width: 17%;
         padding: 1% .5%;
         height: 150px;
+        a {
+            text-decoration: none;
+            color: #9D9D9D;
+        }
         // border-bottom: 1px solid silver;
     }
 }
 
+#dashHead {
+    text-align: center;
+}
+
 #uservids {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 0;
+    a {
+        width: 100%;
+        text-decoration: none;
+        color: black;
+    }
     .uservid {
+        text-align: center;
+        width: 20%;
+        display: inline-flex;
         list-style: none;
+        margin: 2%;
     }
     #thumbnail {
-        width: 25%;
+        width: 100%;
+    }
+}
+
+#video-page {
+    #title {
+        text-align: center;
+    }
+    #description {
+        text-align: center;
+    }
+    #upload-time {
+        text-align: center;
+    }
+    #comment-box {
+        text-align: center;
+    }
+    #showDetails {
+        text-align: center;
+    }
+    #hideDetails {
+        text-align: center;
+    }
+    .comments {
+        border-top: 1px solid silver;
+        list-style: none;
+        height: 100px;
+        text-align: center;
+        vertical-align: middle;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 }
 
@@ -219,6 +343,9 @@ body {
         }
         #hamburger {
             display: inline;
+        }
+        #user {
+            display: none;
         }
     }
 }
@@ -232,6 +359,9 @@ body {
             right: 12%;
         }
         .logBut {
+            right: 3%;
+        }
+        #upload {
             right: 3%;
         }
     }
@@ -255,8 +385,11 @@ body {
             top: 50%;
             transform: translateY(0%);
         }
+        #upload {
+            right: 6.5%;
+        }
         #searchbar {
-            left: 10%;
+            left: 8%;
             #searchBut {
                 width: 30px;
                 font-size: 1em;
