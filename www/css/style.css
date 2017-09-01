@@ -161,7 +161,9 @@ body {
   align-items: center; }
 
 #dashvids #thumbnailsub {
-  text-align: center; }
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.5em; }
 
 #dashvids #headThumbnail {
   text-align: center; }
@@ -169,7 +171,12 @@ body {
 #dashvids #deleteVideo {
   margin-top: 10%;
   display: block;
-  margin: 0 auto; }
+  margin: 0 auto;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.5em;
+  color: white;
+  background-color: crimson;
+  margin-bottom: 2%; }
 
 #dashvids #subThumb {
   margin-bottom: 5%; }
@@ -212,7 +219,9 @@ body {
   margin-top: 3%; }
 
 #home #thumbnail {
-  width: 100%; }
+  width: 100%;
+  max-width: 200px;
+  max-height: 110px; }
 
 #home .videos {
   width: 17%;
@@ -244,7 +253,9 @@ body {
     list-style: none;
     margin: 2%; }
   #uservids #thumbnail {
-    width: 100%; }
+    width: 100%;
+    max-width: 230px;
+    max-height: 130px; }
 
 #video-page #title {
   text-align: center; }
@@ -318,3 +329,47 @@ body {
     width: 33%;
     padding: 1% 1%;
     height: 100px; } }
+
+#uploadPage h1 {
+  text-align: center;
+  padding-bottom: 3%; }
+
+#uploadPage #titleForm {
+  text-align: center; }
+  #uploadPage #titleForm #titleHead {
+    display: inline;
+    text-align: center;
+    font-size: 2em; }
+  #uploadPage #titleForm #newTitle {
+    font-size: 2em;
+    font-family: 'Roboto', sans-serif; }
+
+#uploadPage #descrForm {
+  text-align: center; }
+  #uploadPage #descrForm #descrHead {
+    padding-top: 3%;
+    text-align: center;
+    font-size: 2em; }
+  #uploadPage #descrForm #newDescr {
+    font-size: 1.5em;
+    text-align: center;
+    font-family: 'Roboto', sans-serif; }
+
+#uploadPage #form {
+  text-align: center;
+  padding-top: 2%; }
+  #uploadPage #form .inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1; }
+  #uploadPage #form #fileBut {
+    margin: 0 5%;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.5em; }
+  #uploadPage #form #subBut {
+    margin: 0 5%;
+    font-size: 1.5em;
+    font-family: 'Roboto', sans-serif; }

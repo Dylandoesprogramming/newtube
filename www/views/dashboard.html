@@ -1,7 +1,7 @@
 <topbar>
 </topbar>
-<h1 id="dashHead">{{user.username}}'s Dashboard</h1>
-<ul id="uservids">
+<h1 id="dashHead" ng-if="user">{{user.username}}'s Dashboard</h1>
+<ul id="uservids" ng-if="user">
     <li class="uservid" ng-repeat="video in videos">
         <a href="/#!/dashboard/video/{{video.vidid}}">
             <img id="thumbnail" ng-src="{{video.thumbnail}}">
@@ -9,3 +9,4 @@
         </a>
     </li>
 </ul>
+<h1 ng-if="!user">Log in first!</h1>

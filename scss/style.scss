@@ -197,6 +197,8 @@ body {
     #thumbnailsub {
         // display: block !important;
         text-align: center;
+        font-family: 'Roboto', sans-serif;
+        font-size: 1.5em;
         // border: 1px solid black;
         // border-top: none;
     }
@@ -207,6 +209,11 @@ body {
         margin-top: 10%;
         display: block;
         margin: 0 auto;
+        font-family: 'Roboto', sans-serif;
+        font-size: 1.5em;
+        color: white;
+        background-color: crimson;
+        margin-bottom: 2%;
     }
     #subThumb {
         // border: 1px solid silver;
@@ -262,6 +269,8 @@ body {
     }
     #thumbnail {
         width: 100%;
+        max-width: 200px;
+        max-height: 110px;
         // display: inline;
     }
     .videos {
@@ -302,6 +311,8 @@ body {
     }
     #thumbnail {
         width: 100%;
+        max-width: 230px;
+        max-height: 130px;
     }
 }
 
@@ -404,6 +415,68 @@ body {
             width: 33%;
             padding: 1% 1%;
             height: 100px;
+        }
+    }
+}
+
+#uploadPage {
+    h1 {
+        text-align: center;
+        // border-bottom: 1px solid silver;
+        padding-bottom: 3%;
+    }
+    #titleForm {
+        text-align: center;
+        #titleHead {
+            display: inline;
+            text-align: center;
+            font-size: 2em;
+        }
+        #newTitle {
+            font-size: 2em;
+            font-family: 'Roboto', sans-serif;
+        }
+    }
+    #descrForm {
+        text-align: center;
+        #descrHead {
+            padding-top: 3%;
+            text-align: center;
+            font-size: 2em;
+        }
+        #newDescr {
+            font-size: 1.5em;
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
+        }
+    }
+    #form {
+        text-align: center;
+        padding-top: 2%;
+        // #file {
+        //     font-size: 1.5em;
+        //     padding-top: 2%;
+        //     // text-align: center;
+        //     font-family: 'Roboto', sans-serif;
+        // }
+        .inputfile {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+        #fileBut {
+            margin: 0 5%;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.5em;
+        }
+        #subBut {
+            margin: 0 5%;
+            font-size: 1.5em;
+            // text-align: center;
+            font-family: 'Roboto', sans-serif;
         }
     }
 }

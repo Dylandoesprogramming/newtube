@@ -1,15 +1,23 @@
-<div id="upload">
-    <topbar>
-    </topbar>
-    <h1>Upload</h1>
-    <input type="text" id="newTitle" placeholder="Title" ng-model="newTitle">
-    <textarea rows="10" cols="50" ng-model="newDescr" id="typedDescr" placeholder="description goes here."></textarea>
+<topbar>
+</topbar>
+<div id="uploadPage">
+    <h1>Upload a Video</h1>
+    <div id="titleForm">
+        <h2 id="titleHead">Title:</h2>
+        <input type="text" id="newTitle" placeholder="Enter a Title" ng-model="newTitle">
+    </div>
+
+    <div id='descrForm'>
+        <h2 id="descrHead">Description</h2>
+        <textarea rows="10" cols="50" ng-model="newDescr" id="newDescr" placeholder="Enter a Description"></textarea>
+    </div>
     <!-- <form method="post" enctype="multipart/form-data" action="/upload">
         <input type="file" name="upload" id="file">
         <input type="submit" value="upload">
     </form> -->
-    <form enctype='multipart/form-data' ng-submit="postFile()">
-        <input type="file" name="upload" id="file">
-        <input type="submit" value="upload">
+    <form id="form" enctype='multipart/form-data' ng-submit="postFile()">
+        <input type="file" name="upload" id="file" class="inputfile">
+        <button id="fileBut"><label for="file">Choose a file</label></button>
+        <button type="submit" id="subBut">Upload</button>
     </form>
 </div>
