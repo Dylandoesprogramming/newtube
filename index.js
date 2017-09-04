@@ -10,29 +10,30 @@ const massive = require('massive');
 const gulp = require('gulp');
 const formidable = require('formidable');
 const fs = require('fs');
-const config = require("./config");
+// const config = require("./config");
 const homeCtrl = require("./controllers/homeCtrl")
 const app = module.exports = express();
+const connectionString = process.env.DATABASE_URL;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(session({
     resave: true, //Without this you get a constant warning about default values
     saveUninitialized: true, //Without this you get a constant warning about default values
-    secret: config.secret
+    secret: process.env.secret
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(express.static('www'));
-massive(config.connectionString).then(db => {
+massive(connectionString).then(db => {
     app.set('db', db)
         // data = app.get('db');
 })
 
 passport.use(new Auth0Strategy({
-        domain: config.auth0.domain,
-        clientID: config.auth0.clientID,
-        clientSecret: config.auth0.clientSecret,
+        domain: process.env.auth0.domain,
+        clientID: process.env.auth0.clientID,
+        clientSecret: process.env.auth0.clientSecret,
         callbackURL: '/auth/callback'
     },
     function(accessToken, refreshToken, extraParams, profile, done) {
@@ -240,5 +241,5 @@ app.post('/file-upload/:id', function(req, res) {
     }
 });
 
-app.listen(3001, () => console.log('listening port 3001'));
-// app.listen(process.env.PORT, () => console.log('listening port 3001'));
+// app.listen(3001, () => console.log('listening port 3001'));
+app.listen(process.env.PORT, () => console.log('listening port 3001'));
