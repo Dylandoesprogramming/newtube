@@ -6,15 +6,18 @@
     <p id="showDetails" ng-click="showDetails = true" ng-show="!showDetails">Show Video Details</p>
     <div id="hideDetails" ng-show="showDetails">
         <p id="description">{{curVideo.descr}}</p>
-        <p id="upload-time">{{curVideo.uptime}}</p>
+        <p id="upload-time">{{curVideo.uptime | date:'MMM dd yyyy'}}</p>
         <p id="hideDetails" ng-click="showDetails = false">Hide Video Details</p>
     </div>
 
-    <form id="comment-box">
+    <form id="comment-box" ng-if="user">
         <textarea rows="10" cols="50" placeholder="Enter a comment here." ng-model="curComment"></textarea>
         <button type="button" ng-click="subComment(curComment)">Submit</button>
     </form>
     <ul>
-        <li class="comments" ng-repeat="comment in comments">{{comment.comment}} <br/> -{{comment.username}}-</li>
+        <li class="comments" ng-repeat="comment in comments">
+            <p class="comment">{{comment.comment}}</p>
+            <img class="userpic" ng-src="{{comment.userpic}}"> {{comment.username}}
+        </li>
     </ul>
 </div>

@@ -24,6 +24,7 @@ app.controller('videoCtrl', function($scope, $stateParams, videoSrvc) {
                     for (var i = 0; i < $scope.comments.length; i++) {
                         if (tempuser.userid == $scope.comments[i].userid) {
                             $scope.comments[i].username = tempuser.username;
+                            $scope.comments[i].userpic = tempuser.userpic;
                             console.log($scope.comments[i]);
                         }
                     }

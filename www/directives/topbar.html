@@ -7,7 +7,7 @@
     </div>
 
     <div id="signin">
-        <p id="user" ng-if='user'>Signed in as: <a href="/#!/dashboard">{{user.username}}</a></p>
+        <a href="/#!/dashboard" id="user" ng-if="user"><img ng-src="{{user.userpic}}"></a>
         <a id="login" class="logBut" href="/auth "><button type="button " ng-if="!user">Login</button></a>
         <a id="logout" class="logBut" href="/auth/logout "><button type="button" ng-if="user">Logout</button></a>
         <a href="/#!/dashboard/upload"><button type="button" id="upload" ng-if="user">Upload Video</button></a>

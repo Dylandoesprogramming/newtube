@@ -245,10 +245,12 @@ app.directive('player', function () {
                 }
             });
 
-            $('#player').keyup(function (e) {
-                if (e.keyCode == 32) {
-                    scope.togglePlayPause();
-                }
+            $('#player').focus(function () {
+                $('#player').keyup(function (e) {
+                    if (e.keyCode == 32) {
+                        scope.togglePlayPause();
+                    }
+                });
             });
 
             scope.togglePlayPause = function () {
@@ -425,6 +427,7 @@ app.controller('videoCtrl', function ($scope, $stateParams, videoSrvc) {
                     for (var i = 0; i < $scope.comments.length; i++) {
                         if (tempuser.userid == $scope.comments[i].userid) {
                             $scope.comments[i].username = tempuser.username;
+                            $scope.comments[i].userpic = tempuser.userpic;
                             console.log($scope.comments[i]);
                         }
                     }

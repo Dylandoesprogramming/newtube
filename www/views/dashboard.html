@@ -8,5 +8,16 @@
             <br/> {{video.title}}
         </a>
     </li>
-</ul>
+</ul><br>
+<div id="changePic" ng-if="user">
+    <h2>Profile Image</h2>
+    <img id="userPic" src={{user.userpic}}><br>
+    <form id="picsub" method="post" enctype="multipart/form-data" action='/profile'>
+        <input type="file" name="userup">
+        <input type="submit">
+    </form>
+
+</div>
+
+
 <h1 ng-if="!user">Log in first!</h1>

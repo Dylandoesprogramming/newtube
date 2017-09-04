@@ -10,10 +10,11 @@ const massive = require('massive');
 const gulp = require('gulp');
 const formidable = require('formidable');
 const fs = require('fs');
-// const config = require("./config");
+const config = require("./config");
 const homeCtrl = require("./controllers/homeCtrl")
 const app = module.exports = express();
 const connectionString = process.env.DATABASE_URL;
+let newUser;
 const auth0 = {
     domain: 'dylandoesprogramming.auth0.com',
     clientID: 'EOBs2CF6oMfdla6DteAcrEPY19CtKV66',
@@ -24,13 +25,18 @@ app.use(bodyParser.json());
 app.use(session({
     resave: true, //Without this you get a constant warning about default values
     saveUninitialized: true, //Without this you get a constant warning about default values
-    secret: process.env.secret
+    // secret: process.env.secret
+    secret: config.secret
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(express.static('www'));
-massive(connectionString).then(db => {
+// massive(connectionString).then(db => {
+//     app.set('db', db)
+//         // data = app.get('db');
+// })
+massive(config.connectionString).then(db => {
     app.set('db', db)
         // data = app.get('db');
 })
@@ -91,11 +97,16 @@ passport.deserializeUser(function(user, done) {
 
 // Return user object from session
 app.get('/me', function(req, res) {
-    res.send(req.user.user)
+    if (newUser) {
+        res.send(newUser);
+    } else {
+        console.log(req.user.user)
+        res.send(req.user.user)
+    }
 })
 
 app.get('/auth/logout', function(req, res) {
-    req.logout({ returnTo: 'https://newtubeheroku.herokuapp.com/#!/' });
+    req.logout();
     res.redirect('https://dylandoesprogramming.auth0.com/v2/logout');
     console.log(req.user)
 })
@@ -246,5 +257,79 @@ app.post('/file-upload/:id', function(req, res) {
     }
 });
 
-// app.listen(3001, () => console.log('listening port 3001'));
-app.listen(process.env.PORT, () => console.log('listening port 3001'));
+app.get('/profile', function(req, res) {
+    res.sendFile(__dirname + '/www/index.html');
+});
+
+app.post('/profile', function(req, res) {
+
+    var form = new formidable.IncomingForm();
+    form.parse(req);
+    if (req.user) {
+        var userId = req.user.user.userid;
+        console.log('User Found')
+        form.on('fileBegin', function(name, file) {
+            if (file.name.indexOf('.png') > 0 || file.name.indexOf('.PNG') > 0) {
+                console.log('file is png')
+                var checkName = function() {
+                    var checkFile = "../img/" + file.name;
+                    app.get('db').getUserByPic(checkFile).then(function(video) {
+                        console.log("got user by pic");
+                        // console.log(video);
+                        if (video[0]) {
+                            // console.log(video[0])
+                            console.log(video[0].userpic + ":" + checkFile);
+                            if (video[0].userpic == checkFile && file.name.indexOf('.png')) {
+                                console.log("renaming img")
+                                file.name = file.name.slice(0, file.name.length - 4);
+                                file.name = file.name + "re";
+                                file.name = file.name + ".png";
+                            } else if (video[0].userpic == checkFile) {
+                                console.log("renaming img")
+                                file.name = file.name.slice(0, file.name.length - 4);
+                                file.name = file.name + "re";
+                                file.name = file.name + ".PNG";
+                            }
+                            return checkName();
+                        }
+
+                        console.log('setting path')
+                        form.uploadDir = __dirname + '/www/img/'
+                        fs.rename(file.path, form.uploadDir + "/" + file.name, function(err) {
+                            console.log("ERROR: " + err);
+                        });
+                        app.get('db').changePic(userId, "../img/" + file.name).then(function(video) {
+                            if (video[0].userpic.indexOf('../www/')) {
+                                video[0].userpic = video[0].userpic.replace("../www/", "../");
+                            }
+                            app.get('db').getUserById(userId).then(function(user) {
+                                // console.log('Setting req.user.user: ' + JSON.stringify(req.user.user) + ':' + JSON.stringify(user[0]))
+                                newUser = user[0];
+                                // console.log("New user:" + JSON.stringify(req.user.user))
+                                res.status(200).send();
+                            })
+                        });
+                    });
+                }
+
+                checkName()
+            } else {
+                console.log("NOT A IMAGE!");
+            }
+        });
+
+        form.on('file', function(name, file) {
+            console.log(file.name)
+            console.log('Uploaded ' + file.name);
+        });
+
+        res.redirect("/#!/dashboard");
+    } else {
+        console.log("NOT LOGGED IN!")
+        res.redirect("/auth")
+            // res.status(400).send('Not Logged In!')
+    }
+});
+
+app.listen(3001, () => console.log('listening port 3001'));
+// app.listen(process.env.PORT, () => console.log('listening port 3001'));

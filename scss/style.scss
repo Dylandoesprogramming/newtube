@@ -141,12 +141,18 @@ body {
     }
     #user {
         position: absolute;
-        right: 8%;
-        a {
-            text-decoration: none;
-            color: black;
-            border-bottom: 1px solid silver;
+        right: 10%;
+        top: 15%;
+        img {
+            border-radius: 50%;
+            height: 35px;
+            width: 35px;
         }
+        // a {
+        //     text-decoration: none;
+        //     color: black;
+        //     border-bottom: 1px solid silver;
+        // }
     }
     .logBut {
         position: absolute;
@@ -289,6 +295,21 @@ body {
     text-align: center;
 }
 
+#changePic {
+    text-align: center;
+    h2 {
+        text-align: center;
+    }
+    #picsub {
+        text-align: center;
+    }
+    #userPic {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+    }
+}
+
 #uservids {
     display: flex;
     flex-wrap: wrap;
@@ -339,11 +360,21 @@ body {
         border-top: 1px solid silver;
         list-style: none;
         height: 100px;
-        text-align: center;
+        // text-align: center;
         vertical-align: middle;
         display: flex;
-        justify-content: center;
+        // justify-content: center;
         align-items: center;
+        .comment {
+            margin-left: 25%;
+            width: 25%;
+        }
+        .userpic {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            margin-left: 25%;
+        }
     }
 }
 
@@ -356,7 +387,8 @@ body {
             display: inline;
         }
         #user {
-            display: none;
+            // display: none;
+            right: 15%;
         }
     }
 }
@@ -367,7 +399,7 @@ body {
             display: none;
         }
         #user {
-            right: 12%;
+            right: 20%;
         }
         .logBut {
             right: 3%;
@@ -387,9 +419,7 @@ body {
             display: none;
         }
         #user {
-            right: 13%;
-            margin: 0;
-            top: 2%;
+            right: 30%;
         }
         .logBut {
             right: 13%;
@@ -400,6 +430,8 @@ body {
             right: 6.5%;
         }
         #searchbar {
+            padding: 0;
+            margin: 0;
             left: 8%;
             #searchBut {
                 width: 30px;

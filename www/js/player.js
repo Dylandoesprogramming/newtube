@@ -88,10 +88,12 @@ app.directive('player', function() {
                 }
             })
 
-            $('#player').keyup(function(e) {
-                if (e.keyCode == 32) {
-                    scope.togglePlayPause();
-                }
+            $('#player').focus(function() {
+                $('#player').keyup(function(e) {
+                    if (e.keyCode == 32) {
+                        scope.togglePlayPause();
+                    }
+                })
             })
 
             scope.togglePlayPause = function() {
