@@ -95,8 +95,8 @@ app.get('/me', function(req, res) {
 })
 
 app.get('/auth/logout', function(req, res) {
-    req.logout().redirect('https://dylandoesprogramming.auth0.com/v2/logout');;
-    res.redirect('/');
+    req.logout();
+    res.redirect('https://dylandoesprogramming.auth0.com/v2/logout');
     console.log(req.user)
 })
 
