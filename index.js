@@ -95,7 +95,7 @@ app.get('/me', function(req, res) {
 })
 
 app.get('/auth/logout', function(req, res) {
-    req.logout();
+    req.logout({ returnTo: 'https://newtubeheroku.herokuapp.com/#!/' });
     res.redirect('https://dylandoesprogramming.auth0.com/v2/logout');
     console.log(req.user)
 })
