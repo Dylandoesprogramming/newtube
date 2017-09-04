@@ -14,6 +14,11 @@ const fs = require('fs');
 const homeCtrl = require("./controllers/homeCtrl")
 const app = module.exports = express();
 const connectionString = process.env.DATABASE_URL;
+const auth0 = {
+    domain: 'dylandoesprogramming.auth0.com',
+    clientID: 'EOBs2CF6oMfdla6DteAcrEPY19CtKV66',
+    clientSecret: 'E1FPOjWBpMkMiDRBbTSSttQwskNoFV6gmsWTWpzaHHmdnbYItPV0QP_9TTN-4WbX'
+};
 app.use(cors());
 app.use(bodyParser.json());
 app.use(session({
@@ -31,9 +36,9 @@ massive(connectionString).then(db => {
 })
 
 passport.use(new Auth0Strategy({
-        domain: process.env.auth0.domain,
-        clientID: process.env.auth0.clientID,
-        clientSecret: process.env.auth0.clientSecret,
+        domain: auth0.domain,
+        clientID: auth0.clientID,
+        clientSecret: auth0.clientSecret,
         callbackURL: '/auth/callback'
     },
     function(accessToken, refreshToken, extraParams, profile, done) {
